@@ -1,14 +1,15 @@
 import streamlit as st
-import pandas as pd
 
-from backend.services.validation_service import validate_file
-from backend.services.upload_service import load_dataset
+from backend.engines.data_engine import DataEngine
+from backend.managers.session_manager import SessionManager
 from backend.services.metadata_service import get_dataset_metadata
+from backend.services.validation_service import validate_file
+
 
 st.set_page_config(
     page_title="InsightPilot AI",
     page_icon="📊",
-    layout="wide"
+    layout="wide",
 )
 
 st.title("📊 InsightPilot AI")
@@ -16,41 +17,58 @@ st.subheader("Enterprise Decision Intelligence Platform")
 
 uploaded_file = st.file_uploader(
     "Upload your dataset",
-    type=["csv", "xlsx"]
+    type=["csv", "xlsx", "xls"],
 )
 
-if uploaded_file:
+# -----------------------------
+# Upload Dataset
+# -----------------------------
+if uploaded_file is not None:
 
-    valid, message = validate_file(uploaded_file)
+    is_valid, message = validate_file(uploaded_file)
 
-    if not valid:
+    if not is_valid:
         st.error(message)
 
     else:
+        try:
+            engine = DataEngine()
 
-        st.success(message)
+            df = engine.load_dataset(uploaded_file)
 
-        df = load_dataset(uploaded_file)
+            SessionManager.save_dataset(
+                df,
+                uploaded_file.name,
+            )
 
-        metadata = get_dataset_metadata(df, uploaded_file)
+            st.success("✅ Dataset uploaded successfully!")
 
-        st.header("Dataset Information")
+        except Exception as e:
+            st.error(str(e))
 
-        col1, col2, col3 = st.columns(3)
+# -----------------------------
+# Display Dataset
+# -----------------------------
+if SessionManager.has_dataset():
 
-        with col1:
-            st.metric("Rows", metadata["Rows"])
+    df = SessionManager.get_dataset()
 
-        with col2:
-            st.metric("Columns", metadata["Columns"])
+    st.divider()
 
-        with col3:
-            st.metric("Memory (MB)", metadata["Memory Usage (MB)"])
+    st.subheader("📋 Dataset Preview")
 
-        st.write("### Metadata")
+    st.dataframe(
+        df.head(),
+        width="stretch",
+    )
 
-        st.json(metadata)
+    st.divider()
 
-        st.write("### Dataset Preview")
+    st.subheader("📊 Dataset Metadata")
 
-        st.dataframe(df.head(10), use_container_width=True)
+    metadata = get_dataset_metadata(
+        df,
+        SessionManager.get_file_name(),
+    )
+
+    st.json(metadata)

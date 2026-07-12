@@ -1,0 +1,13 @@
+CustomerID,CustomerName,Age,City,AccountType,Balance,AccountStatus,AccountOpeningDate
+100001,Rahul Sharma,34,Delhi,Savings,125000.5,Active,2021-03-15
+100002,José Silva,41,São Paulo,Current,98250.75,Active,2020-11-08
+100003,François Martin,38,Paris,Savings,245500.0,Active,2019-07-22
+100004,Müller Schmidt,45,Berlin,Business,1250000.0,Active,2018-05-10
+100005,Aisha Khan,29,Mumbai,Savings,78500.0,Dormant,2022-01-18
+100006,Aarav Patel,31,Ahmedabad,Current,45200.9,Active,2023-06-01
+100007,Søren Nielsen,52,Copenhagen,Business,3459000.0,Active,2017-09-14
+100008,Chloé Dubois,27,Lyon,Savings,63400.3,Inactive,2024-02-12
+100009,Meera Iyer,36,Bengaluru,Salary,158750.8,Active,2021-08-30
+100010,Łukasz Kowalski,40,Warsaw,Current,210450.65,Active,2020-12-05
+100011,Fatima Noor,33,Dubai,Savings,99000.1,KYC Pending,2023-09-21
+100012,Kenji Tanaka,48,Tokyo,Business,5200000.0,Active,2016-04-03
