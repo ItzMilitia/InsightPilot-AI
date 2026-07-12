@@ -16,7 +16,8 @@ import pandas as pd
 FileLike = Union[str, Path, BinaryIO]
 
 
-class DataEngine:
+from backend.core.base_engine import BaseEngine
+class DataEngine(BaseEngine):
     """
     Central engine responsible for reading datasets.
 
@@ -28,7 +29,8 @@ class DataEngine:
 
     SUPPORTED_EXTENSIONS = {".csv", ".xlsx", ".xls"}
 
-    def __init__(self) -> None:
+    def __init__(self):
+        super().__init__()
         self._backend = "pandas"
 
     @property
