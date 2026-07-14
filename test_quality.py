@@ -10,8 +10,19 @@ df = data_engine.load_dataset(
 
 report = quality_engine.analyze(df)
 
-print("\nQuality Score")
+print()
+
+print("Quality Score")
 print(report.quality_score)
 
-print("\nQuality Grade")
+print()
+
+print("Quality Grade")
 print(report.quality_grade)
+
+print()
+
+print("Recommendations")
+
+for recommendation in report.recommendations:
+    print("-", recommendation)

@@ -109,6 +109,12 @@ class QualityEngine(BaseEngine):
             )
         )
 
+        report.recommendations = (
+            self._generate_recommendations(
+                report
+            )
+        )
+
         self.log_finish(
             "Quality Analysis",
             start,
@@ -363,4 +369,109 @@ class QualityEngine(BaseEngine):
                 df[column].dtype
             )
 
+    
         return summary
+    
+    def _generate_recommendations(
+        self,
+        report: QualityReport,
+    ) -> list[str]:
+        """
+        Generate recommendations based on
+        detected quality issues.
+        """
+
+        recommendations: list[str] = []
+
+        # -----------------------------------------
+        # Missing Values
+        # -----------------------------------------
+
+        if report.missing_values > 0:
+
+            columns = ", ".join(
+                report.missing_value_summary.keys()
+            )
+
+            recommendations.append(
+                f"Fill missing values in column(s): {columns}."
+            )
+
+        # -----------------------------------------
+        # Duplicate Rows
+        # -----------------------------------------
+
+        if report.duplicate_rows > 0:
+
+            recommendations.append(
+                f"Remove {report.duplicate_rows} duplicate row(s)."
+            )
+
+        # -----------------------------------------
+        # Duplicate Columns
+        # -----------------------------------------
+
+        if report.duplicate_columns > 0:
+
+            duplicate_columns = []
+
+            for duplicates in (
+                report.duplicate_column_summary.values()
+            ):
+                duplicate_columns.extend(
+                    duplicates
+                )
+
+            recommendations.append(
+                "Review duplicate column(s): "
+                + ", ".join(duplicate_columns)
+                + "."
+            )
+
+        # -----------------------------------------
+        # Outliers
+        # -----------------------------------------
+
+        if report.outlier_summary:
+
+            columns = ", ".join(
+                report.outlier_summary.keys()
+            )
+
+            recommendations.append(
+                f"Investigate outliers in column(s): {columns}."
+            )
+
+        # -----------------------------------------
+        # Quality Score
+        # -----------------------------------------
+
+        if report.quality_score >= 90:
+
+            recommendations.append(
+                "Dataset quality is Excellent. "
+                "Suitable for analytics and AI workloads."
+            )
+
+        elif report.quality_score >= 75:
+
+            recommendations.append(
+                "Dataset quality is Good. "
+                "Minor cleaning is recommended."
+            )
+
+        elif report.quality_score >= 60:
+
+            recommendations.append(
+                "Dataset quality is Fair. "
+                "Data cleaning should be performed before analysis."
+            )
+
+        else:
+
+            recommendations.append(
+                "Dataset quality is Poor. "
+                "Extensive cleaning is recommended before use."
+            )
+
+        return recommendations
