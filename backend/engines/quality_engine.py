@@ -33,6 +33,16 @@ class QualityEngine(BaseEngine):
             df.duplicated().sum()
         )
 
+        report.duplicate_row_summary = self._analyze_duplicate_rows(df)
+
+        report.duplicate_columns = len(
+            self._find_duplicate_columns(df)
+        )
+
+        report.duplicate_column_summary = self._analyze_duplicate_columns(df)
+
+        report.data_type_summary = self._analyze_data_types(df)
+
         self.log_finish(
             "Quality Analysis",
             start,
@@ -44,9 +54,6 @@ class QualityEngine(BaseEngine):
         self,
         df: pd.DataFrame,
     ) -> dict[str, dict[str, float | int]]:
-        """
-        Generate per-column missing value statistics.
-        """
 
         summary: dict[str, dict[str, float | int]] = {}
 
@@ -69,5 +76,80 @@ class QualityEngine(BaseEngine):
                     2,
                 ),
             }
+
+        return summary
+
+    def _analyze_duplicate_rows(
+        self,
+        df: pd.DataFrame,
+    ) -> dict[str, float | int]:
+
+        total_rows = len(df)
+
+        duplicate_count = int(df.duplicated().sum())
+
+        percentage = (
+            round((duplicate_count / total_rows) * 100, 2)
+            if total_rows > 0
+            else 0.0
+        )
+
+        return {
+            "count": duplicate_count,
+            "percentage": percentage,
+        }
+
+    def _find_duplicate_columns(
+        self,
+        df: pd.DataFrame,
+    ) -> list[str]:
+
+        duplicate_columns: list[str] = []
+
+        columns = list(df.columns)
+
+        for i in range(len(columns)):
+            for j in range(i + 1, len(columns)):
+
+                if df[columns[i]].equals(df[columns[j]]):
+                    duplicate_columns.append(columns[j])
+
+        return duplicate_columns
+
+    def _analyze_duplicate_columns(
+        self,
+        df: pd.DataFrame,
+    ) -> dict[str, list[str]]:
+
+        summary: dict[str, list[str]] = {}
+
+        columns = list(df.columns)
+
+        for i in range(len(columns)):
+
+            duplicates: list[str] = []
+
+            for j in range(i + 1, len(columns)):
+
+                if df[columns[i]].equals(df[columns[j]]):
+                    duplicates.append(columns[j])
+
+            if duplicates:
+                summary[columns[i]] = duplicates
+
+        return summary
+
+    def _analyze_data_types(
+        self,
+        df: pd.DataFrame,
+    ) -> dict[str, str]:
+        """
+        Generate a mapping of each column to its pandas data type.
+        """
+
+        summary: dict[str, str] = {}
+
+        for column in df.columns:
+            summary[column] = str(df[column].dtype)
 
         return summary

@@ -21,6 +21,19 @@ class QualityReport:
     )
 
     duplicate_rows: int = 0
+
+    duplicate_row_summary: dict[str, float | int] = field(
+        default_factory=dict
+    )
+
     duplicate_columns: int = 0
+
+    duplicate_column_summary: dict[str, list[str]] = field(
+        default_factory=dict
+    )
+
+    data_type_summary: dict[str, str] = field(
+        default_factory=dict
+    )
 
     recommendations: list[str] = field(default_factory=list)
