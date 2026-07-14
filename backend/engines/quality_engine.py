@@ -4,6 +4,7 @@ import pandas as pd
 
 from backend.core.base_engine import BaseEngine
 from backend.models.quality_report import QualityReport
+from backend.analyzers.outlier_analyzer import OutlierAnalyzer
 
 
 class QualityEngine(BaseEngine):
@@ -11,7 +12,17 @@ class QualityEngine(BaseEngine):
     Performs quality analysis on tabular datasets.
     """
 
-    def analyze(self, df: pd.DataFrame) -> QualityReport:
+    def __init__(self) -> None:
+        """
+        Initialize the Quality Engine.
+        """
+        super().__init__()
+        self.outlier_analyzer = OutlierAnalyzer()
+
+    def analyze(
+        self,
+        df: pd.DataFrame,
+    ) -> QualityReport:
         """
         Analyze a dataset and generate a quality report.
         """
@@ -23,25 +34,52 @@ class QualityEngine(BaseEngine):
         report.total_rows = len(df)
         report.total_columns = len(df.columns)
 
+        # -----------------------------
+        # Missing Values
+        # -----------------------------
         report.missing_values = int(
             df.isna().sum().sum()
         )
 
-        report.missing_value_summary = self._analyze_missing_values(df)
+        report.missing_value_summary = self._analyze_missing_values(
+            df
+        )
 
+        # -----------------------------
+        # Duplicate Rows
+        # -----------------------------
         report.duplicate_rows = int(
             df.duplicated().sum()
         )
 
-        report.duplicate_row_summary = self._analyze_duplicate_rows(df)
+        report.duplicate_row_summary = (
+            self._analyze_duplicate_rows(df)
+        )
 
+        # -----------------------------
+        # Duplicate Columns
+        # -----------------------------
         report.duplicate_columns = len(
             self._find_duplicate_columns(df)
         )
 
-        report.duplicate_column_summary = self._analyze_duplicate_columns(df)
+        report.duplicate_column_summary = (
+            self._analyze_duplicate_columns(df)
+        )
 
-        report.data_type_summary = self._analyze_data_types(df)
+        # -----------------------------
+        # Data Types
+        # -----------------------------
+        report.data_type_summary = (
+            self._analyze_data_types(df)
+        )
+
+        # -----------------------------
+        # Outliers
+        # -----------------------------
+        report.outlier_summary = (
+            self.outlier_analyzer.analyze(df)
+        )
 
         self.log_finish(
             "Quality Analysis",
@@ -54,6 +92,9 @@ class QualityEngine(BaseEngine):
         self,
         df: pd.DataFrame,
     ) -> dict[str, dict[str, float | int]]:
+        """
+        Generate per-column missing value statistics.
+        """
 
         summary: dict[str, dict[str, float | int]] = {}
 
@@ -83,13 +124,21 @@ class QualityEngine(BaseEngine):
         self,
         df: pd.DataFrame,
     ) -> dict[str, float | int]:
+        """
+        Generate duplicate row statistics.
+        """
 
         total_rows = len(df)
 
-        duplicate_count = int(df.duplicated().sum())
+        duplicate_count = int(
+            df.duplicated().sum()
+        )
 
         percentage = (
-            round((duplicate_count / total_rows) * 100, 2)
+            round(
+                (duplicate_count / total_rows) * 100,
+                2,
+            )
             if total_rows > 0
             else 0.0
         )
@@ -103,6 +152,9 @@ class QualityEngine(BaseEngine):
         self,
         df: pd.DataFrame,
     ) -> list[str]:
+        """
+        Identify duplicate columns.
+        """
 
         duplicate_columns: list[str] = []
 
@@ -111,8 +163,12 @@ class QualityEngine(BaseEngine):
         for i in range(len(columns)):
             for j in range(i + 1, len(columns)):
 
-                if df[columns[i]].equals(df[columns[j]]):
-                    duplicate_columns.append(columns[j])
+                if df[columns[i]].equals(
+                    df[columns[j]]
+                ):
+                    duplicate_columns.append(
+                        columns[j]
+                    )
 
         return duplicate_columns
 
@@ -120,6 +176,9 @@ class QualityEngine(BaseEngine):
         self,
         df: pd.DataFrame,
     ) -> dict[str, list[str]]:
+        """
+        Generate duplicate column summary.
+        """
 
         summary: dict[str, list[str]] = {}
 
@@ -131,8 +190,12 @@ class QualityEngine(BaseEngine):
 
             for j in range(i + 1, len(columns)):
 
-                if df[columns[i]].equals(df[columns[j]]):
-                    duplicates.append(columns[j])
+                if df[columns[i]].equals(
+                    df[columns[j]]
+                ):
+                    duplicates.append(
+                        columns[j]
+                    )
 
             if duplicates:
                 summary[columns[i]] = duplicates
@@ -144,12 +207,14 @@ class QualityEngine(BaseEngine):
         df: pd.DataFrame,
     ) -> dict[str, str]:
         """
-        Generate a mapping of each column to its pandas data type.
+        Generate data type summary.
         """
 
         summary: dict[str, str] = {}
 
         for column in df.columns:
-            summary[column] = str(df[column].dtype)
+            summary[column] = str(
+                df[column].dtype
+            )
 
         return summary

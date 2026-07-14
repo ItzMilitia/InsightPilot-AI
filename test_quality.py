@@ -4,8 +4,11 @@ from backend.engines.quality_engine import QualityEngine
 data_engine = DataEngine()
 quality_engine = QualityEngine()
 
-df = data_engine.load_dataset("datasets/banking/bank_customers.csv")
+df = data_engine.load_dataset(
+    "datasets/banking/bank_customers.csv"
+)
+
 
 report = quality_engine.analyze(df)
 
-print(report.data_type_summary)
+print(report.outlier_summary)
