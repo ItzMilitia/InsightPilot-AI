@@ -8,7 +8,10 @@ df = data_engine.load_dataset(
     "datasets/banking/bank_customers.csv"
 )
 
-
 report = quality_engine.analyze(df)
 
-print(report.outlier_summary)
+print("\nQuality Score")
+print(report.quality_score)
+
+print("\nQuality Grade")
+print(report.quality_grade)
