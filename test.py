@@ -1,20 +1,35 @@
 import pandas as pd
 
 from backend.engines.analysis_engine import AnalysisEngine
+from backend.engines.insight_engine import InsightEngine
+from backend.engines.html_report_engine import HTMLReportEngine
+from backend.engines.pdf_report_engine import PDFReportEngine
 
 df = pd.DataFrame(
     {
-        "Age": [21, 22, 23, 24],
+        "Age": [21, 22, None, 24],
         "Salary": [25000, 27000, 29000, 31000],
-        "Department": ["IT", "HR", "IT", "Finance"],
+        "Department": [
+            "IT",
+            "HR",
+            "IT",
+            "Finance",
+        ],
     }
 )
 
-engine = AnalysisEngine()
+analysis = AnalysisEngine().analyze(df)
 
-report = engine.analyze(df)
+insights = InsightEngine().analyze(analysis)
 
-print(type(report.quality).__name__)
-print(type(report.profiling).__name__)
-print(type(report.correlation).__name__)
-print(type(report.visualization).__name__)
+html = HTMLReportEngine().generate(
+    analysis,
+    insights,
+)
+
+pdf = PDFReportEngine().generate(
+    html,
+    "reports/report.pdf",
+)
+
+print(pdf.file_path)
