@@ -7,6 +7,11 @@ from backend.models.visualization_report import (
     ChartSpec,
     VisualizationReport,
 )
+from backend.models.visualization_report import (
+    ChartSpec,
+    VisualizationReport,
+)
+from backend.config.settings import settings
 
 
 class VisualizationEngine(BaseEngine):
@@ -34,17 +39,23 @@ class VisualizationEngine(BaseEngine):
             self._generate_dtype_chart(df)
         )
 
-        report.charts.extend(
-            self._generate_histograms(df)
-        )
+        if settings.generate_histograms:
 
-        report.charts.extend(
-            self._generate_boxplots(df)
-        )
+            report.charts.extend(
+                self._generate_histograms(df)
+            )
 
-        report.charts.extend(
-            self._generate_heatmap(df)
-        )
+        if settings.generate_boxplots:
+
+            report.charts.extend(
+                self._generate_boxplots(df)
+            )
+
+        if settings.generate_heatmap:
+
+            report.charts.extend(
+                self._generate_heatmap(df)
+            )
 
         self.log_finish(
             "Visualization Analysis",

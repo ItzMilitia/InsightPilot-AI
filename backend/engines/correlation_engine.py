@@ -3,10 +3,12 @@ from __future__ import annotations
 import pandas as pd
 
 from backend.core.base_engine import BaseEngine
+from backend.config.settings import settings
 from backend.models.correlation_report import (
     CorrelationPair,
     CorrelationReport,
 )
+from backend.config import settings
 
 
 class CorrelationEngine(BaseEngine):
@@ -24,7 +26,7 @@ class CorrelationEngine(BaseEngine):
         self,
         df: pd.DataFrame,
         method: str = "pearson",
-        threshold: float = 0.80,
+        threshold: float | None = None,
     ) -> CorrelationReport:
         """
         Analyze correlations between numeric columns.
@@ -37,6 +39,12 @@ class CorrelationEngine(BaseEngine):
         report = CorrelationReport(method=method)
 
         numeric_df = df.select_dtypes(include="number")
+
+        if threshold is None:
+            threshold = settings.correlation_threshold
+
+        if method is None:
+            method = settings.default_correlation_method
 
         if numeric_df.shape[1] < 2:
             self.log_finish(

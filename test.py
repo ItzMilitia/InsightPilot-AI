@@ -1,35 +1,11 @@
-import pandas as pd
+from backend.config.settings import settings
 
-from backend.engines.analysis_engine import AnalysisEngine
-from backend.engines.insight_engine import InsightEngine
-from backend.engines.html_report_engine import HTMLReportEngine
-from backend.engines.pdf_report_engine import PDFReportEngine
+print(settings.correlation_threshold)
+print(settings.default_correlation_method)
 
-df = pd.DataFrame(
-    {
-        "Age": [21, 22, None, 24],
-        "Salary": [25000, 27000, 29000, 31000],
-        "Department": [
-            "IT",
-            "HR",
-            "IT",
-            "Finance",
-        ],
-    }
-)
+print(settings.generate_heatmap)
+print(settings.generate_histograms)
+print(settings.generate_boxplots)
 
-analysis = AnalysisEngine().analyze(df)
-
-insights = InsightEngine().analyze(analysis)
-
-html = HTMLReportEngine().generate(
-    analysis,
-    insights,
-)
-
-pdf = PDFReportEngine().generate(
-    html,
-    "reports/report.pdf",
-)
-
-print(pdf.file_path)
+print(settings.report_title)
+print(settings.report_author)

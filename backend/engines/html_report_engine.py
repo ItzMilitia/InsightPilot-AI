@@ -5,7 +5,7 @@ from datetime import datetime
 from backend.models.analysis_report import AnalysisReport
 from backend.models.html_report import HTMLReport
 from backend.models.insight_report import InsightReport
-
+from backend.config.settings import settings
 
 class HTMLReportEngine:
     """
@@ -27,7 +27,7 @@ class HTMLReportEngine:
 
 <meta charset="UTF-8">
 
-<title>InsightPilot AI Report</title>
+<title>{settings.report_title}</title>
 
 <style>
 
@@ -114,7 +114,7 @@ th {{
 """
 
         return HTMLReport(
-            title="InsightPilot AI Report",
+            title=settings.report_title,
             html=html,
         )
 
@@ -127,7 +127,7 @@ th {{
         return f"""
 <div class="section">
 
-<h1>InsightPilot AI</h1>
+<h1>{settings.report_title}</h1>
 
 <h3>Enterprise Data Analysis Report</h3>
 
