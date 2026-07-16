@@ -224,15 +224,15 @@ class ProfilingEngine(BaseEngine):
 
         return profile
     
-    datetime_df = df.select_dtypes(
-        include=["datetime", "datetimetz"]
-    )
-
-    for column in datetime_df.columns:
-        profile = self._profile_datetime_column(
-            column,
-            datetime_df[column],
+        datetime_df = df.select_dtypes(
+            include=["datetime", "datetimetz"]
         )
+
+        for column in datetime_df.columns:
+            profile = self._profile_datetime_column(
+                column,
+                datetime_df[column],
+            )
 
         report.datetime_profiles.append(profile)
 
