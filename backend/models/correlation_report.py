@@ -5,6 +5,10 @@ from dataclasses import dataclass, field
 
 @dataclass(slots=True)
 class CorrelationPair:
+    """
+    Represents a correlated pair of numeric features.
+    """
+
     column_x: str
     column_y: str
 
@@ -15,6 +19,9 @@ class CorrelationPair:
 
 @dataclass(slots=True)
 class CorrelationReport:
+    """
+    Stores the results of correlation analysis.
+    """
 
     method: str
 
@@ -27,5 +34,13 @@ class CorrelationReport:
     )
 
     strong_negative: list[CorrelationPair] = field(
+        default_factory=list
+    )
+
+    recommendations: list[str] = field(
+        default_factory=list
+    )
+
+    highly_correlated_pairs: list[CorrelationPair] = field(
         default_factory=list
     )
