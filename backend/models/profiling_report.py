@@ -1,7 +1,7 @@
 from __future__ import annotations
-
 from dataclasses import dataclass, field
-
+from backend.models.categorical_profile import CategoricalProfile
+from backend.models.datetime_profile import DatetimeProfile
 
 @dataclass(slots=True)
 class NumericProfile:
@@ -45,6 +45,14 @@ class ProfilingReport:
 
     total_numeric_columns: int = 0
 
-    profiles: list[NumericProfile] = field(
+    numeric_profiles: list[NumericProfile] = field(
+        default_factory=list
+    )
+
+    categorical_profiles: list[CategoricalProfile] = field(
+        default_factory=list
+    )
+
+    datetime_profiles: list[DatetimeProfile] = field(
         default_factory=list
     )
