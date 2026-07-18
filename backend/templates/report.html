@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ metadata.title }}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ css_path }}"
+    >
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ========================================= -->
+    <!-- Report Header -->
+    <!-- ========================================= -->
+
+    <header class="report-header">
+
+        <h1>
+            {{ metadata.title }}
+        </h1>
+
+        <div class="report-meta">
+
+            <span>
+                Version:
+                {{ metadata.version }}
+            </span>
+
+            <span>
+                Generated:
+                {{ metadata.generated_at }}
+            </span>
+
+        </div>
+
+    </header>
+
+    <!-- ========================================= -->
+    <!-- Navigation -->
+    <!-- ========================================= -->
+
+    <nav class="report-navigation">
+
+        <ul>
+
+            <li><a href="#summary">Summary</a></li>
+
+            <li><a href="#dataset">Dataset</a></li>
+
+            <li><a href="#quality">Quality</a></li>
+
+            <li><a href="#profiling">Profiling</a></li>
+
+            <li><a href="#correlation">Correlation</a></li>
+
+            <li><a href="#rules">Rules</a></li>
+
+            <li><a href="#insights">Insights</a></li>
+
+            <li><a href="#recommendations">Recommendations</a></li>
+
+        </ul>
+
+    </nav>
+
+    <!-- ========================================= -->
+    <!-- Sections -->
+    <!-- ========================================= -->
+
+    {% include "sections/executive_summary.html" %}
+
+    {% include "sections/dataset_info.html" %}
+
+    {% include "sections/quality.html" %}
+
+    {% include "sections/profiling.html" %}
+
+    {% include "sections/correlation.html" %}
+
+    {% include "sections/rules.html" %}
+
+    {% include "sections/insights.html" %}
+
+    {% include "sections/recommendations.html" %}
+
+</div>
+
+<script src="{{ js_path }}"></script>
+
+</body>
+
+</html>

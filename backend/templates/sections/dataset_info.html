@@ -1,0 +1,139 @@
+<section id="dataset" class="section">
+
+    <div class="section-header">
+        <h2>Dataset Information</h2>
+        <p>
+            General information about the uploaded dataset.
+        </p>
+    </div>
+
+    <!-- Dataset Overview -->
+
+    <div class="info-grid">
+
+        <div class="info-card">
+            <h3>Dataset Name</h3>
+            <p>{{ dataset_info.name | default("Unknown") }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>File Format</h3>
+            <p>{{ dataset_info.format | default("Unknown") }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>File Size</h3>
+            <p>{{ dataset_info.file_size | default("N/A") }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>Memory Usage</h3>
+            <p>{{ dataset_info.memory_usage | default("N/A") }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>Total Rows</h3>
+            <p>{{ dataset_info.total_rows | default("N/A") }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>Total Columns</h3>
+            <p>{{ dataset_info.total_columns | default("N/A") }}</p>
+        </div>
+
+    </div>
+
+    <!-- Column Type Summary -->
+
+    <div class="subsection">
+
+        <h3>Column Type Distribution</h3>
+
+        <table class="report-table">
+
+            <thead>
+
+                <tr>
+                    <th>Type</th>
+                    <th>Count</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Numeric</td>
+                    <td>{{ dataset_info.column_types.numeric | default(0) }}</td>
+                </tr>
+
+                <tr>
+                    <td>Categorical</td>
+                    <td>{{ dataset_info.column_types.categorical | default(0) }}</td>
+                </tr>
+
+                <tr>
+                    <td>Datetime</td>
+                    <td>{{ dataset_info.column_types.datetime | default(0) }}</td>
+                </tr>
+
+                <tr>
+                    <td>Boolean</td>
+                    <td>{{ dataset_info.column_types.boolean | default(0) }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Dataset Preview -->
+
+    {% if dataset_info.preview %}
+
+    <div class="subsection">
+
+        <h3>Dataset Preview</h3>
+
+        <div class="table-wrapper">
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+
+                        {% for column in dataset_info.preview[0].keys() %}
+                            <th>{{ column }}</th>
+                        {% endfor %}
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for row in dataset_info.preview %}
+
+                    <tr>
+
+                        {% for value in row.values() %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</section>

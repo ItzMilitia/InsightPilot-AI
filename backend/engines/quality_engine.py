@@ -13,7 +13,14 @@ from backend.core.quality_config import (
     MISSING_VALUE_WEIGHT,
     OUTLIER_WEIGHT,
 )
-from backend.models.quality_report import QualityReport
+from backend.models.quality_report import (
+    DataTypeReport,
+    DuplicateReport,
+    MissingValueReport,
+    OutlierReport,
+    QualityReport,
+    QualitySummary,
+)
 
 
 class QualityEngine(BaseEngine):
@@ -37,88 +44,83 @@ class QualityEngine(BaseEngine):
 
         report = QualityReport()
 
-        report.total_rows = len(df)
-        report.total_columns = len(df.columns)
+        # ---------------------------------------------------------
+        # Summary
+        # ---------------------------------------------------------
+
+        report.summary = QualitySummary(
+            total_rows=len(df),
+            total_columns=len(df.columns),
+        )
 
         # ---------------------------------------------------------
         # Missing Values
         # ---------------------------------------------------------
 
-        report.missing_values = int(
-            df.isna().sum().sum()
-        )
-
-        report.missing_value_summary = (
-            self._analyze_missing_values(df)
+        report.missing = MissingValueReport(
+            total_missing=int(df.isna().sum().sum()),
+            columns=self._analyze_missing_values(df),
         )
 
         # ---------------------------------------------------------
-        # Duplicate Rows
+        # Duplicate Information
         # ---------------------------------------------------------
 
-        report.duplicate_rows = int(
-            df.duplicated().sum()
-        )
-
-        report.duplicate_row_summary = (
-            self._analyze_duplicate_rows(df)
-        )
-
-        # ---------------------------------------------------------
-        # Duplicate Columns
-        # ---------------------------------------------------------
-
-        report.duplicate_columns = len(
-            self._find_duplicate_columns(df)
-        )
-
-        report.duplicate_column_summary = (
-            self._analyze_duplicate_columns(df)
+        report.duplicates = DuplicateReport(
+            duplicate_rows=int(df.duplicated().sum()),
+            duplicate_columns=len(
+                self._find_duplicate_columns(df)
+            ),
+            row_summary=self._analyze_duplicate_rows(df),
+            column_summary=self._analyze_duplicate_columns(df),
         )
 
         # ---------------------------------------------------------
         # Data Types
         # ---------------------------------------------------------
 
-        report.data_type_summary = (
-            self._analyze_data_types(df)
+        report.data_types = DataTypeReport(
+            summary=self._analyze_data_types(df),
         )
 
         # ---------------------------------------------------------
         # Outliers
         # ---------------------------------------------------------
 
-        report.outlier_summary = (
-            self.outlier_analyzer.analyze(df)
+        report.outliers = OutlierReport(
+            columns=self.outlier_analyzer.analyze(df),
         )
 
         # ---------------------------------------------------------
         # Quality Score
         # ---------------------------------------------------------
 
-        report.quality_score = round(
-            self._calculate_quality_score(
-                report,
-            ),
+        report.summary.score = round(
+            self._calculate_quality_score(report),
             2,
         )
 
-        report.quality_grade = (
-            self._get_quality_grade(
-                report.quality_score,
-            )
+        report.summary.grade = self._get_quality_grade(
+            report.summary.score
         )
 
+        # ---------------------------------------------------------
+        # Recommendations
+        # ---------------------------------------------------------
+
         report.recommendations = (
-            self._generate_recommendations(
-                report
-            )
+            self._generate_recommendations(report)
         )
 
         self.log_finish(
             "Quality Analysis",
             start,
         )
+
+        report.metadata = {
+            "engine": "QualityEngine",
+            "version": "8.2",
+        }
 
         return report
 
@@ -134,46 +136,46 @@ class QualityEngine(BaseEngine):
         Calculate the overall quality score.
         """
 
-        if report.total_rows == 0:
+        if report.summary.total_rows == 0:
             return 100.0
 
-        if report.total_columns == 0:
+        if report.summary.total_columns == 0:
             return 100.0
 
         total_cells = (
-            report.total_rows
-            * report.total_columns
+            report.summary.total_rows
+            * report.summary.total_columns
         )
 
         missing_ratio = (
-            report.missing_values
+            report.missing.total_missing
             / total_cells
         )
 
         duplicate_row_ratio = (
-            report.duplicate_rows
-            / report.total_rows
+            report.duplicates.duplicate_rows
+            / report.summary.total_rows
         )
 
         duplicate_column_ratio = (
-            report.duplicate_columns
-            / report.total_columns
+            report.duplicates.duplicate_columns
+            / report.summary.total_columns
         )
 
         total_outliers = sum(
             item["count"]
-            for item in report.outlier_summary.values()
+            for item in report.outliers.columns.values()
         )
 
         numeric_columns = max(
             1,
-            len(report.outlier_summary),
+            len(report.outliers.columns),
         )
 
         outlier_ratio = (
             total_outliers
             / (
-                report.total_rows
+                report.summary.total_rows
                 * numeric_columns
             )
         )
@@ -387,10 +389,10 @@ class QualityEngine(BaseEngine):
         # Missing Values
         # -----------------------------------------
 
-        if report.missing_values > 0:
+        if report.missing.total_missing > 0:
 
             columns = ", ".join(
-                report.missing_value_summary.keys()
+                report.missing.columns.keys()
             )
 
             recommendations.append(
@@ -401,7 +403,7 @@ class QualityEngine(BaseEngine):
         # Duplicate Rows
         # -----------------------------------------
 
-        if report.duplicate_rows > 0:
+        if report.duplicates.duplicate_rows > 0:
 
             recommendations.append(
                 f"Remove {report.duplicate_rows} duplicate row(s)."
@@ -411,12 +413,12 @@ class QualityEngine(BaseEngine):
         # Duplicate Columns
         # -----------------------------------------
 
-        if report.duplicate_columns > 0:
+        if report.duplicates.duplicate_columns > 0:
 
             duplicate_columns = []
 
             for duplicates in (
-                report.duplicate_column_summary.values()
+                report.duplicates.column_summary.values()
             ):
                 duplicate_columns.extend(
                     duplicates
@@ -432,10 +434,10 @@ class QualityEngine(BaseEngine):
         # Outliers
         # -----------------------------------------
 
-        if report.outlier_summary:
+        if report.outliers.columns:
 
             columns = ", ".join(
-                report.outlier_summary.keys()
+                report.outliers.columns.keys()
             )
 
             recommendations.append(
@@ -446,14 +448,14 @@ class QualityEngine(BaseEngine):
         # Quality Score
         # -----------------------------------------
 
-        if report.quality_score >= 90:
+        if report.summary.score >= 90:
 
             recommendations.append(
                 "Dataset quality is Excellent. "
                 "Suitable for analytics and AI workloads."
             )
 
-        elif report.quality_score >= 75:
+        elif report.summary.score >= 75:
 
             recommendations.append(
                 "Dataset quality is Good. "

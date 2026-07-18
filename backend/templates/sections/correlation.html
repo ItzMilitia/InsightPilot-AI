@@ -1,0 +1,222 @@
+<section id="correlation" class="section">
+
+    <div class="section-header">
+        <h2>Correlation Analysis</h2>
+        <p>
+            Analysis of relationships between numeric variables.
+        </p>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Correlation Summary -->
+    <!-- ========================================= -->
+
+    <div class="kpi-grid">
+
+        <div class="kpi-card">
+            <div class="kpi-title">Numeric Columns</div>
+            <div class="kpi-value">
+                {{ correlation.numeric_columns | default(0) }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Correlation Pairs</div>
+            <div class="kpi-value">
+                {{ correlation.total_pairs | default(0) }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Strong Correlations</div>
+            <div class="kpi-value">
+                {{ correlation.strong_pairs | default(0) }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Threshold</div>
+            <div class="kpi-value">
+                {{ correlation.threshold | default("0.8") }}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Strong Positive Correlations -->
+    <!-- ========================================= -->
+
+    {% if correlation.positive_pairs %}
+
+    <div class="subsection">
+
+        <h3>Strong Positive Correlations</h3>
+
+        <div class="table-wrapper">
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Column A</th>
+                        <th>Column B</th>
+                        <th>Correlation</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for pair in correlation.positive_pairs %}
+
+                    <tr>
+
+                        <td>{{ pair.column_a }}</td>
+
+                        <td>{{ pair.column_b }}</td>
+
+                        <td>{{ "%.3f"|format(pair.value) }}</td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <!-- ========================================= -->
+    <!-- Strong Negative Correlations -->
+    <!-- ========================================= -->
+
+    {% if correlation.negative_pairs %}
+
+    <div class="subsection">
+
+        <h3>Strong Negative Correlations</h3>
+
+        <div class="table-wrapper">
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Column A</th>
+                        <th>Column B</th>
+                        <th>Correlation</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for pair in correlation.negative_pairs %}
+
+                    <tr>
+
+                        <td>{{ pair.column_a }}</td>
+
+                        <td>{{ pair.column_b }}</td>
+
+                        <td>{{ "%.3f"|format(pair.value) }}</td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <!-- ========================================= -->
+    <!-- Heatmap -->
+    <!-- ========================================= -->
+
+    {% if correlation.heatmap_path %}
+
+    <div class="subsection">
+
+        <h3>Correlation Heatmap</h3>
+
+        <div class="chart-container">
+
+            <img
+                src="{{ correlation.heatmap_path }}"
+                alt="Correlation Heatmap"
+                class="report-chart"
+            >
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <!-- ========================================= -->
+    <!-- Multicollinearity -->
+    <!-- ========================================= -->
+
+    {% if correlation.multicollinearity %}
+
+    <div class="subsection">
+
+        <h3>Potential Multicollinearity</h3>
+
+        <table class="report-table">
+
+            <thead>
+
+                <tr>
+                    <th>Column A</th>
+                    <th>Column B</th>
+                    <th>Correlation</th>
+                    <th>Recommendation</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for pair in correlation.multicollinearity %}
+
+                <tr>
+
+                    <td>{{ pair.column_a }}</td>
+
+                    <td>{{ pair.column_b }}</td>
+
+                    <td>{{ "%.3f"|format(pair.value) }}</td>
+
+                    <td>
+                        Consider removing one of these highly correlated
+                        variables.
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+</section>

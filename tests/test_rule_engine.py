@@ -200,3 +200,20 @@ def test_invalid_pack_raises_value_error():
             df,
             pack="unknown",
         )
+
+def test_rule_report_to_dict():
+
+    df = pd.DataFrame(
+        {
+            "CustomerID": [1],
+            "Balance": [100],
+        }
+    )
+
+    engine = RuleEngine()
+
+    report = engine.evaluate(df)
+
+    serialized = report.to_dict()
+
+    assert isinstance(serialized, dict)

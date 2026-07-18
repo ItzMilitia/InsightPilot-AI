@@ -26,12 +26,18 @@ class ProfilingEngine(BaseEngine):
         report = ProfilingReport()
 
         # ---------------------------------------------------------
+        # Summary
+        # ---------------------------------------------------------
+
+        report.summary.total_columns = len(df.columns)
+
+        # ---------------------------------------------------------
         # Numeric Columns
         # ---------------------------------------------------------
 
         numeric_df = df.select_dtypes(include="number")
 
-        report.total_numeric_columns = len(
+        report.summary.numeric_columns = len(
             numeric_df.columns
         )
 
@@ -52,6 +58,10 @@ class ProfilingEngine(BaseEngine):
             include=["object", "category", "string"]
         )
 
+        report.summary.categorical_columns = len(
+            categorical_df.columns
+        )
+
         for column in categorical_df.columns:
 
             profile = self._profile_categorical_column(
@@ -60,6 +70,50 @@ class ProfilingEngine(BaseEngine):
             )
 
             report.categorical_profiles.append(profile)
+
+        # ---------------------------------------------------------
+        # Datetime Columns
+        # ---------------------------------------------------------
+
+        datetime_df = df.select_dtypes(
+            include=["datetime", "datetimetz"]
+        )
+
+        report.summary.datetime_columns = len(
+            datetime_df.columns
+        )
+
+        for column in datetime_df.columns:
+
+            profile = self._profile_datetime_column(
+                column,
+                datetime_df[column],
+            )
+
+            report.datetime_profiles.append(profile)
+
+        # ---------------------------------------------------------
+        # Memory Usage
+        # ---------------------------------------------------------
+
+        memory_usage = df.memory_usage(deep=True)
+
+        report.memory.total_memory = (
+            f"{memory_usage.sum() / 1024:.2f} KB"
+        )
+
+        report.memory.average_column_memory = (
+            f"{memory_usage.mean() / 1024:.2f} KB"
+        )
+
+        # ---------------------------------------------------------
+        # Metadata
+        # ---------------------------------------------------------
+
+        report.metadata = {
+            "engine": "ProfilingEngine",
+            "version": "8.2",
+        }
 
         self.log_finish(
             "Profiling Analysis",
@@ -223,18 +277,6 @@ class ProfilingEngine(BaseEngine):
         profile.maximum_length = int(lengths.max())
 
         return profile
-    
-        datetime_df = df.select_dtypes(
-            include=["datetime", "datetimetz"]
-        )
-
-        for column in datetime_df.columns:
-            profile = self._profile_datetime_column(
-                column,
-                datetime_df[column],
-            )
-
-        report.datetime_profiles.append(profile)
 
     def _profile_datetime_column(
         self,

@@ -56,6 +56,31 @@ class InsightEngine(BaseEngine):
             )
         )
 
+        report.summary.total_insights = len(
+            report.insights
+        )
+
+        report.summary.critical = sum(
+            insight.severity.lower() == "critical"
+            for insight in report.insights
+        )
+
+        report.summary.warning = sum(
+            insight.severity.lower() == "warning"
+            for insight in report.insights
+        )
+
+        report.summary.informational = sum(
+            insight.severity.lower() == "info"
+            or insight.severity.lower() == "informational"
+            for insight in report.insights
+        )
+
+        report.metadata = {
+            "engine": "InsightEngine",
+            "version": "8.2",
+        }
+
         self.log_finish(
             "Insight Generation",
             start,
@@ -73,20 +98,35 @@ class InsightEngine(BaseEngine):
     ) -> list[Insight]:
 
         quality = report.quality
+        summary = quality.summary
 
         return [
             Insight(
+                id="quality_overview",
+                title="Dataset Quality Overview",
                 category="Quality",
                 severity="Info",
-                title=f"Dataset Quality: {quality.quality_grade}",
+                confidence=1.0,
                 description=(
-                    f"The dataset achieved a quality score of "
-                    f"{quality.quality_score:.2f}."
+                    f"The dataset achieved an overall quality score of "
+                    f"{summary.score:.2f} "
+                    f"with grade '{summary.grade}'."
+                ),
+                business_impact=(
+                    "Higher quality datasets generally produce more "
+                    "reliable analytics and machine learning models."
                 ),
                 recommendation=(
-                    "Review the quality report before "
-                    "performing downstream analytics."
+                    "Review the Quality Report and resolve critical "
+                    "data quality issues before downstream analysis."
                 ),
+                source_engine="QualityEngine",
+                metadata={
+                    "score": summary.score,
+                    "grade": summary.grade,
+                    "rows": summary.total_rows,
+                    "columns": summary.total_columns,
+                },
             )
         ]
 
@@ -101,28 +141,54 @@ class InsightEngine(BaseEngine):
 
         insights: list[Insight] = []
 
-        for column, values in (
-            report.quality.missing_value_summary.items()
-        ):
+        missing_report = report.quality.missing
+
+        for column_name, stats in missing_report.columns.items():
+
+            percentage = float(stats.get("percentage", 0))
+            count = int(stats.get("count", 0))
+
+            if count == 0:
+                continue
+
+            if percentage >= 30:
+                severity = "Critical"
+            elif percentage >= 10:
+                severity = "Warning"
+            else:
+                severity = "Info"
 
             insights.append(
                 Insight(
+                    id=f"missing_{column_name}",
+                    title=f"Missing Values in '{column_name}'",
                     category="Missing Values",
-                    severity="Warning",
-                    title=f"Missing values detected in '{column}'",
+                    severity=severity,
+                    confidence=1.0,
                     description=(
-                        f"{values['percentage']}% of the values "
-                        f"are missing."
+                        f"Column '{column_name}' contains "
+                        f"{count} missing values "
+                        f"({percentage:.2f}% of the dataset)."
+                    ),
+                    business_impact=(
+                        "Missing values may reduce model accuracy, "
+                        "bias statistical analysis, and affect data quality."
                     ),
                     recommendation=(
-                        "Consider imputing missing values "
-                        "before model training."
+                        "Consider imputing missing values, removing "
+                        "affected rows, or investigating the source "
+                        "of missing data."
                     ),
+                    affected_columns=[column_name],
+                    source_engine="QualityEngine",
+                    metadata={
+                        "missing_count": count,
+                        "missing_percentage": percentage,
+                    },
                 )
             )
 
         return insights
-
     # ============================================================
     # Profiling Insights
     # ============================================================
@@ -138,18 +204,35 @@ class InsightEngine(BaseEngine):
 
             insights.append(
                 Insight(
+                    id=f"profile_{profile.column_name}",
+                    title=f"Numeric Profile: {profile.column_name}",
                     category="Profiling",
                     severity="Info",
-                    title=f"Numeric Profile: {profile.column_name}",
+                    confidence=1.0,
                     description=(
-                        f"Mean={profile.mean}, "
-                        f"Median={profile.median}, "
-                        f"Std Dev={profile.standard_deviation}"
+                        f"Column '{profile.column_name}' has "
+                        f"mean={profile.mean:.4f}, "
+                        f"median={profile.median:.4f}, "
+                        f"standard deviation={profile.standard_deviation:.4f}."
+                    ),
+                    business_impact=(
+                        "Understanding feature distributions helps "
+                        "identify skewness, anomalies, and potential "
+                        "feature engineering opportunities."
                     ),
                     recommendation=(
-                        "Review the distribution for "
-                        "possible skewness or outliers."
+                        "Review this column for skewness, outliers, "
+                        "or normalization before model training."
                     ),
+                    affected_columns=[profile.column_name],
+                    source_engine="ProfilingEngine",
+                    metadata={
+                        "mean": profile.mean,
+                        "median": profile.median,
+                        "std_dev": profile.standard_deviation,
+                        "minimum": profile.minimum,
+                        "maximum": profile.maximum,
+                    },
                 )
             )
 
@@ -215,22 +298,38 @@ class InsightEngine(BaseEngine):
         report: AnalysisReport,
     ) -> list[Insight]:
 
-        chart_count = len(
-            report.visualization.charts
+        chart_count = sum(
+            len(category.charts)
+            for category in report.visualization.categories
         )
 
         return [
             Insight(
+                id="visualization_summary",
+                title="Visualization Summary",
                 category="Visualization",
                 severity="Info",
-                title="Visualization Summary",
+                confidence=1.0,
                 description=(
-                    f"{chart_count} chart specifications "
-                    "have been generated."
+                    f"{chart_count} chart specifications have been "
+                    "generated for exploratory data analysis."
+                ),
+                business_impact=(
+                    "Visual exploration helps identify trends, "
+                    "relationships, anomalies, and potential "
+                    "data quality issues."
                 ),
                 recommendation=(
-                    "Use the visualization module "
-                    "to explore the dataset."
+                    "Review the generated visualizations before "
+                    "performing detailed statistical analysis "
+                    "or machine learning."
                 ),
+                source_engine="VisualizationEngine",
+                metadata={
+                    "chart_count": chart_count,
+                    "category_count": len(
+                        report.visualization.categories
+                    ),
+                },
             )
         ]

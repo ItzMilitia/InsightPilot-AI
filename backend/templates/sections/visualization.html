@@ -1,0 +1,113 @@
+<section id="visualization" class="section">
+
+    <div class="section-header">
+        <h2>Data Visualizations</h2>
+
+        <p>
+            Charts generated automatically by the Visualization Engine.
+        </p>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Visualization Summary -->
+    <!-- ========================================= -->
+
+    <div class="kpi-grid">
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Total Charts
+            </div>
+
+            <div class="kpi-value">
+                {{ visualization.total_charts | default(0) }}
+            </div>
+
+        </div>
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Chart Categories
+            </div>
+
+            <div class="kpi-value">
+                {{ visualization.categories | length }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Chart Gallery -->
+    <!-- ========================================= -->
+
+    {% if visualization.categories %}
+
+        {% for category in visualization.categories %}
+
+        <div class="subsection">
+
+            <h3>{{ category.title }}</h3>
+
+            <div class="chart-grid">
+
+                {% for chart in category.charts %}
+
+                <div class="chart-card">
+
+                    <div class="chart-title">
+
+                        {{ chart.title }}
+
+                    </div>
+
+                    <img
+                        src="{{ chart.path }}"
+                        alt="{{ chart.title }}"
+                        class="report-chart"
+                    >
+
+                    {% if chart.description %}
+
+                    <div class="chart-description">
+
+                        {{ chart.description }}
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+    <!-- ========================================= -->
+    <!-- No Charts -->
+    <!-- ========================================= -->
+
+    {% if not visualization.categories %}
+
+    <div class="empty-state">
+
+        <p>
+
+            No visualizations were generated for this dataset.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</section>

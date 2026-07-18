@@ -134,11 +134,23 @@ class RuleEngine(BaseEngine):
 
         status = "PASS" if failed == 0 else "FAIL"
 
-        return RuleReport(
-            total_rules=len(results),
-            passed_rules=passed,
-            failed_rules=failed,
-            warning_rules=warnings,
-            overall_status=status,
-            results=results,
-        )
+        report = RuleReport()
+
+        report.total_rules = len(results)
+
+        report.passed_rules = passed
+
+        report.failed_rules = failed
+
+        report.warning_rules = warnings
+
+        report.overall_status = status
+
+        report.results = results
+
+        report.metadata = {
+            "engine": "RuleEngine",
+            "version": "8.2",
+        }
+
+        return report

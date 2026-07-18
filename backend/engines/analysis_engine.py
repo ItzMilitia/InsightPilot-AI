@@ -47,12 +47,20 @@ class AnalysisEngine(BaseEngine):
 
         visualization_report = self._visualization_engine.analyze(df)
 
-        report = AnalysisReport(
-            quality=quality_report,
-            profiling=profiling_report,
-            correlation=correlation_report,
-            visualization=visualization_report,
-        )
+        report = AnalysisReport()
+
+        report.quality = quality_report
+
+        report.profiling = profiling_report
+
+        report.correlation = correlation_report
+
+        report.visualization = visualization_report
+
+        report.metadata = {
+            "engine": "AnalysisEngine",
+            "version": "8.2",
+        }
 
         self.log_finish(
             "Complete Dataset Analysis",

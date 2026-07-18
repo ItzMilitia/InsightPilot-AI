@@ -1,0 +1,173 @@
+<section id="insights" class="section">
+
+    <div class="section-header">
+
+        <h2>AI Insights</h2>
+
+        <p>
+            Automatically generated insights and observations derived
+            from the dataset analysis.
+        </p>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Insight Summary -->
+    <!-- ========================================= -->
+
+    <div class="kpi-grid">
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Total Insights
+            </div>
+
+            <div class="kpi-value">
+                {{ insights.total_insights | default(0) }}
+            </div>
+
+        </div>
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Critical
+            </div>
+
+            <div class="kpi-value">
+                {{ insights.critical_count | default(0) }}
+            </div>
+
+        </div>
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Warnings
+            </div>
+
+            <div class="kpi-value">
+                {{ insights.warning_count | default(0) }}
+            </div>
+
+        </div>
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Informational
+            </div>
+
+            <div class="kpi-value">
+                {{ insights.info_count | default(0) }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- AI Insight Cards -->
+    <!-- ========================================= -->
+
+    {% if insights.items %}
+
+    <div class="insight-grid">
+
+        {% for insight in insights.items %}
+
+        <div class="insight-card">
+
+            <div class="insight-header">
+
+                <span class="severity">
+
+                    {{ insight.severity }}
+
+                </span>
+
+                <span class="confidence">
+
+                    Confidence:
+                    {{ insight.confidence }}%
+
+                </span>
+
+            </div>
+
+            <div class="insight-title">
+
+                {{ insight.title }}
+
+            </div>
+
+            <div class="insight-description">
+
+                {{ insight.description }}
+
+            </div>
+
+            {% if insight.columns %}
+
+            <div class="affected-columns">
+
+                <strong>Affected Columns:</strong>
+
+                {% for column in insight.columns %}
+
+                    <span class="column-tag">
+
+                        {{ column }}
+
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+            {% endif %}
+
+            {% if insight.business_impact %}
+
+            <div class="business-impact">
+
+                <strong>Business Impact</strong>
+
+                <p>
+
+                    {{ insight.business_impact }}
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    <!-- ========================================= -->
+    <!-- No Insights -->
+    <!-- ========================================= -->
+
+    {% if not insights.items %}
+
+    <div class="empty-state">
+
+        <p>
+
+            No significant insights were generated for this dataset.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</section>

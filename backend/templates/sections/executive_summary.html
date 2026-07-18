@@ -1,0 +1,106 @@
+<section id="summary" class="section">
+
+    <div class="section-header">
+        <h2>Executive Summary</h2>
+        <p>
+            High-level overview of dataset quality and analysis results.
+        </p>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+
+        <div class="kpi-card">
+            <div class="kpi-title">Overall Quality Score</div>
+            <div class="kpi-value">
+                {{ quality.score | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Rows</div>
+            <div class="kpi-value">
+                {{ dataset_info.total_rows | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Columns</div>
+            <div class="kpi-value">
+                {{ dataset_info.total_columns | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Missing Values</div>
+            <div class="kpi-value">
+                {{ quality.total_missing | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Duplicate Rows</div>
+            <div class="kpi-value">
+                {{ quality.duplicate_rows | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Rules Passed</div>
+            <div class="kpi-value">
+                {{ rules.passed_rules | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Rules Failed</div>
+            <div class="kpi-value">
+                {{ rules.failed_rules | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">AI Insights</div>
+            <div class="kpi-value">
+                {{ insights.total_insights | default("N/A") }}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Report Status -->
+    <div class="summary-status">
+
+        <h3>Report Status</h3>
+
+        <table class="summary-table">
+
+            <tbody>
+
+            <tr>
+                <th>Report Version</th>
+                <td>{{ metadata.version }}</td>
+            </tr>
+
+            <tr>
+                <th>Generated At</th>
+                <td>{{ metadata.generated_at }}</td>
+            </tr>
+
+            <tr>
+                <th>Rule Engine</th>
+                <td>{{ rules.overall_status | default("Unknown") }}</td>
+            </tr>
+
+            <tr>
+                <th>Quality Grade</th>
+                <td>{{ quality.grade | default("N/A") }}</td>
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>

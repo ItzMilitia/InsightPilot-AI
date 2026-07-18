@@ -1,0 +1,245 @@
+<section id="recommendations" class="section">
+
+    <div class="section-header">
+
+        <h2>AI Action Plan</h2>
+
+        <p>
+
+            Prioritized recommendations generated from the complete
+            analysis pipeline.
+
+        </p>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Recommendation Summary -->
+    <!-- ========================================= -->
+
+    <div class="kpi-grid">
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Total Actions
+            </div>
+
+            <div class="kpi-value">
+                {{ recommendations.total_actions | default(0) }}
+            </div>
+
+        </div>
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                High Priority
+            </div>
+
+            <div class="kpi-value">
+                {{ recommendations.high_priority | default(0) }}
+            </div>
+
+        </div>
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Medium Priority
+            </div>
+
+            <div class="kpi-value">
+                {{ recommendations.medium_priority | default(0) }}
+            </div>
+
+        </div>
+
+        <div class="kpi-card">
+
+            <div class="kpi-title">
+                Low Priority
+            </div>
+
+            <div class="kpi-value">
+                {{ recommendations.low_priority | default(0) }}
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Action Plan -->
+    <!-- ========================================= -->
+
+    {% if recommendations.items %}
+
+    <div class="recommendation-list">
+
+        {% for item in recommendations.items %}
+
+        <div class="recommendation-card">
+
+            <div class="recommendation-header">
+
+                <h3>
+
+                    {{ loop.index }}.
+                    {{ item.title }}
+
+                </h3>
+
+                <span class="priority">
+
+                    {{ item.priority }}
+
+                </span>
+
+            </div>
+
+            <p>
+
+                {{ item.description }}
+
+            </p>
+
+            <table class="report-table recommendation-table">
+
+                <tbody>
+
+                    <tr>
+
+                        <th>Category</th>
+
+                        <td>
+
+                            {{ item.category }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Business Impact</th>
+
+                        <td>
+
+                            {{ item.impact }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Implementation Effort</th>
+
+                        <td>
+
+                            {{ item.effort }}
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <th>Source Engine</th>
+
+                        <td>
+
+                            {{ item.source }}
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            {% if item.columns %}
+
+            <div class="affected-columns">
+
+                <strong>
+
+                    Affected Columns
+
+                </strong>
+
+                <div>
+
+                    {% for column in item.columns %}
+
+                    <span class="column-tag">
+
+                        {{ column }}
+
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            {% if item.steps %}
+
+            <div class="implementation-steps">
+
+                <strong>
+
+                    Suggested Steps
+
+                </strong>
+
+                <ol>
+
+                    {% for step in item.steps %}
+
+                    <li>
+
+                        {{ step }}
+
+                    </li>
+
+                    {% endfor %}
+
+                </ol>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    <!-- ========================================= -->
+    <!-- Empty State -->
+    <!-- ========================================= -->
+
+    {% if not recommendations.items %}
+
+    <div class="empty-state">
+
+        <p>
+
+            No recommendations were generated.
+
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</section>

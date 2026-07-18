@@ -8,7 +8,6 @@ from backend.models.correlation_report import (
     CorrelationPair,
     CorrelationReport,
 )
-from backend.config import settings
 
 
 class CorrelationEngine(BaseEngine):
@@ -34,28 +33,46 @@ class CorrelationEngine(BaseEngine):
 
         start = self.log_start("Correlation Analysis")
 
+        if method is None:
+            method = settings.default_correlation_method
+
         self._validate_method(method)
-
-        report = CorrelationReport(method=method)
-
-        numeric_df = df.select_dtypes(include="number")
 
         if threshold is None:
             threshold = settings.correlation_threshold
 
-        if method is None:
-            method = settings.default_correlation_method
+        report = CorrelationReport()
+
+        report.summary.method = method
+        report.summary.threshold = threshold
+
+        numeric_df = df.select_dtypes(include="number")
+
+        report.summary.total_numeric_columns = len(
+            numeric_df.columns
+        )
 
         if numeric_df.shape[1] < 2:
+
+            report.metadata = {
+                "engine": "CorrelationEngine",
+                "version": "8.2",
+            }
+
             self.log_finish(
                 "Correlation Analysis",
                 start,
             )
+
             return report
 
-        correlation_matrix = numeric_df.corr(method=method)
+        correlation_matrix = numeric_df.corr(
+            method=method
+        )
 
-        report.matrix = correlation_matrix.round(4).to_dict()
+        report.matrix = (
+            correlation_matrix.round(4).to_dict()
+        )
 
         (
             report.strong_positive,
@@ -66,11 +83,33 @@ class CorrelationEngine(BaseEngine):
             threshold,
         )
 
+        report.highly_correlated_pairs = (
+            report.strong_positive
+            + report.strong_negative
+        )
+
+        report.summary.total_pairs = (
+            len(report.highly_correlated_pairs)
+        )
+
+        report.summary.strong_positive_count = len(
+            report.strong_positive
+        )
+
+        report.summary.strong_negative_count = len(
+            report.strong_negative
+        )
+
         report.recommendations = (
             self._generate_recommendations(
                 report,
             )
         )
+
+        report.metadata = {
+            "engine": "CorrelationEngine",
+            "version": "8.2",
+        }
 
         self.log_finish(
             "Correlation Analysis",

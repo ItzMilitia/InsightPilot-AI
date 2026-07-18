@@ -4,10 +4,7 @@ import pandas as pd
 
 from backend.core.base_engine import BaseEngine
 from backend.models.visualization_report import (
-    ChartSpec,
-    VisualizationReport,
-)
-from backend.models.visualization_report import (
+    ChartCategory,
     ChartSpec,
     VisualizationReport,
 )
@@ -31,31 +28,93 @@ class VisualizationEngine(BaseEngine):
 
         report = VisualizationReport()
 
-        report.charts.extend(
+        categories: list[ChartCategory] = []
+
+        # ---------------------------------------------------------
+        # Data Quality
+        # ---------------------------------------------------------
+
+        quality_category = ChartCategory(
+            title="Data Quality"
+        )
+
+        quality_category.charts.extend(
             self._generate_missing_chart(df)
         )
 
-        report.charts.extend(
+        if quality_category.charts:
+            categories.append(quality_category)
+
+        # ---------------------------------------------------------
+        # Dataset Overview
+        # ---------------------------------------------------------
+
+        overview_category = ChartCategory(
+            title="Dataset Overview"
+        )
+
+        overview_category.charts.extend(
             self._generate_dtype_chart(df)
         )
 
-        if settings.generate_histograms:
+        if overview_category.charts:
+            categories.append(overview_category)
 
-            report.charts.extend(
+        # ---------------------------------------------------------
+        # Numeric Analysis
+        # ---------------------------------------------------------
+
+        numeric_category = ChartCategory(
+            title="Numeric Analysis"
+        )
+
+        if settings.generate_histograms:
+            numeric_category.charts.extend(
                 self._generate_histograms(df)
             )
 
         if settings.generate_boxplots:
-
-            report.charts.extend(
+            numeric_category.charts.extend(
                 self._generate_boxplots(df)
             )
 
+        if numeric_category.charts:
+            categories.append(numeric_category)
+
+        # ---------------------------------------------------------
+        # Correlation
+        # ---------------------------------------------------------
+
         if settings.generate_heatmap:
 
-            report.charts.extend(
+            correlation_category = ChartCategory(
+                title="Correlation"
+            )
+
+            correlation_category.charts.extend(
                 self._generate_heatmap(df)
             )
+
+            if correlation_category.charts:
+                categories.append(
+                    correlation_category
+                )
+
+        report.categories = categories
+
+        report.summary.total_categories = len(
+            categories
+        )
+
+        report.summary.total_charts = sum(
+            len(category.charts)
+            for category in categories
+        )
+
+        report.metadata = {
+            "engine": "VisualizationEngine",
+            "version": "8.2",
+        }
 
         self.log_finish(
             "Visualization Analysis",

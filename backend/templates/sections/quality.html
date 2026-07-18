@@ -1,0 +1,199 @@
+<section id="quality" class="section">
+
+    <div class="section-header">
+        <h2>Data Quality Assessment</h2>
+        <p>
+            Summary of the dataset's quality metrics and detected issues.
+        </p>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Quality KPI Cards -->
+    <!-- ========================================= -->
+
+    <div class="kpi-grid">
+
+        <div class="kpi-card">
+            <div class="kpi-title">Quality Score</div>
+            <div class="kpi-value">
+                {{ quality.score | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Quality Grade</div>
+            <div class="kpi-value">
+                {{ quality.grade | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Completeness</div>
+            <div class="kpi-value">
+                {{ quality.completeness | default("N/A") }}
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-title">Consistency</div>
+            <div class="kpi-value">
+                {{ quality.consistency | default("N/A") }}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Quality Metrics -->
+    <!-- ========================================= -->
+
+    <div class="subsection">
+
+        <h3>Quality Metrics</h3>
+
+        <table class="report-table">
+
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Total Missing Values</td>
+                    <td>{{ quality.total_missing | default(0) }}</td>
+                </tr>
+
+                <tr>
+                    <td>Missing Percentage</td>
+                    <td>{{ quality.missing_percentage | default("0%") }}</td>
+                </tr>
+
+                <tr>
+                    <td>Duplicate Rows</td>
+                    <td>{{ quality.duplicate_rows | default(0) }}</td>
+                </tr>
+
+                <tr>
+                    <td>Duplicate Percentage</td>
+                    <td>{{ quality.duplicate_percentage | default("0%") }}</td>
+                </tr>
+
+                <tr>
+                    <td>Unique Rows</td>
+                    <td>{{ quality.unique_rows | default("N/A") }}</td>
+                </tr>
+
+                <tr>
+                    <td>Null Columns</td>
+                    <td>{{ quality.null_columns | default(0) }}</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- ========================================= -->
+    <!-- Column Quality -->
+    <!-- ========================================= -->
+
+    {% if quality.column_summary %}
+
+    <div class="subsection">
+
+        <h3>Column Quality Summary</h3>
+
+        <div class="table-wrapper">
+
+            <table class="report-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Column</th>
+                        <th>Missing</th>
+                        <th>Missing %</th>
+                        <th>Unique</th>
+                        <th>Data Type</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for column in quality.column_summary %}
+
+                    <tr>
+
+                        <td>{{ column.name }}</td>
+                        <td>{{ column.missing }}</td>
+                        <td>{{ column.missing_percentage }}</td>
+                        <td>{{ column.unique }}</td>
+                        <td>{{ column.dtype }}</td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <!-- ========================================= -->
+    <!-- Quality Issues -->
+    <!-- ========================================= -->
+
+    {% if quality.issues %}
+
+    <div class="subsection">
+
+        <h3>Detected Issues</h3>
+
+        <table class="report-table">
+
+            <thead>
+
+                <tr>
+                    <th>Severity</th>
+                    <th>Issue</th>
+                    <th>Recommendation</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for issue in quality.issues %}
+
+                <tr>
+
+                    <td>{{ issue.severity }}</td>
+
+                    <td>{{ issue.message }}</td>
+
+                    <td>{{ issue.recommendation }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+</section>
