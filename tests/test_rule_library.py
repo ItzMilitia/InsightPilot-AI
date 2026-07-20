@@ -5,7 +5,7 @@ Unit tests for RuleLibrary.
 import pytest
 
 from backend.rules.base_rule import BaseRule
-from backend.rules.library import RuleLibrary
+from backend.rules.rule_library import RuleLibrary
 from backend.rules.packs.banking_pack import BankingRulePack
 from backend.rules.packs.generic_pack import GenericRulePack
 
