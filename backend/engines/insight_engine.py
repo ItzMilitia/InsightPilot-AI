@@ -253,18 +253,37 @@ class InsightEngine(BaseEngine):
 
             insights.append(
                 Insight(
+                    id=(
+                        f"positive_correlation_"
+                        f"{pair.column_x}_{pair.column_y}"
+                    ),
+                    title="Strong Positive Correlation",
                     category="Correlation",
                     severity="Warning",
-                    title="Strong Positive Correlation",
+                    confidence=1.0,
                     description=(
-                        f"{pair.column_x} and "
-                        f"{pair.column_y} have correlation "
-                        f"{pair.coefficient}."
+                        f"'{pair.column_x}' and "
+                        f"'{pair.column_y}' have a strong positive "
+                        f"correlation of {pair.coefficient:.4f}."
+                    ),
+                    business_impact=(
+                        "Highly correlated features may introduce "
+                        "multicollinearity and reduce model "
+                        "interpretability."
                     ),
                     recommendation=(
-                        "Consider removing one feature "
-                        "to reduce multicollinearity."
+                        "Consider removing one feature or applying "
+                        "dimensionality reduction."
                     ),
+                    affected_columns=[
+                        pair.column_x,
+                        pair.column_y,
+                    ],
+                    source_engine="CorrelationEngine",
+                    metadata={
+                        "coefficient": pair.coefficient,
+                        "direction": "positive",
+                    },
                 )
             )
 
@@ -272,18 +291,36 @@ class InsightEngine(BaseEngine):
 
             insights.append(
                 Insight(
+                    id=(
+                        f"negative_correlation_"
+                        f"{pair.column_x}_{pair.column_y}"
+                    ),
+                    title="Strong Negative Correlation",
                     category="Correlation",
                     severity="Info",
-                    title="Strong Negative Correlation",
+                    confidence=1.0,
                     description=(
-                        f"{pair.column_x} and "
-                        f"{pair.column_y} have correlation "
-                        f"{pair.coefficient}."
+                        f"'{pair.column_x}' and "
+                        f"'{pair.column_y}' have a strong negative "
+                        f"correlation of {pair.coefficient:.4f}."
+                    ),
+                    business_impact=(
+                        "Strong inverse relationships may indicate "
+                        "important predictive behaviour."
                     ),
                     recommendation=(
-                        "Verify whether both variables "
-                        "are required for analysis."
+                        "Verify whether both variables should remain "
+                        "in downstream analysis."
                     ),
+                    affected_columns=[
+                        pair.column_x,
+                        pair.column_y,
+                    ],
+                    source_engine="CorrelationEngine",
+                    metadata={
+                        "coefficient": pair.coefficient,
+                        "direction": "negative",
+                    },
                 )
             )
 

@@ -7,53 +7,74 @@ import pandas as pd
 from backend.engines.analysis_engine import AnalysisEngine
 from backend.engines.html_report_engine import HTMLReportEngine
 from backend.engines.insight_engine import InsightEngine
+from backend.engines.json_report_engine import JSONReportEngine
 from backend.engines.pdf_report_engine import PDFReportEngine
 from backend.engines.rule_engine import RuleEngine
-from backend.engines.json_report_engine import JSONReportEngine
 
-from backend.models.pdf_report import PDFReport
-from backend.models.report_package import ReportPackage
 from backend.models.html_report import HTMLReport
+from backend.models.pdf_report import PDFReport
 from backend.models.report_context import ReportContext
+from backend.models.report_index import ReportIndexEntry
+from backend.models.report_package import ReportPackage
 
 from backend.services.dataset_service import DatasetService
 from backend.services.recommendation_service import RecommendationService
+from backend.services.report_archive_service import ReportArchiveService
 from backend.services.report_builder import ReportBuilder
+from backend.services.report_index_service import ReportIndexService
+from backend.services.report_storage_service import ReportStorageService
+from backend.services.report_validation_service import ReportValidationService
 
 
 class ReportPipeline:
     """
     Enterprise reporting pipeline.
 
-    Responsible only for orchestration.
+    Responsible only for orchestrating the complete report
+    generation lifecycle.
 
     Execution Flow
-
-        DataFrame
-            │
-            ▼
-        DatasetService
-            │
-            ▼
-        AnalysisEngine
-            │
-            ▼
-        RuleEngine
-            │
-            ▼
-        InsightEngine
-            │
-            ▼
-        RecommendationService
-            │
-            ▼
-        ReportBuilder
-            │
-            ▼
-        HTMLReportEngine
-            │
-            ▼
-        PDFReportEngine (optional)
+    --------------
+    DataFrame
+        │
+        ▼
+    DatasetService
+        │
+        ▼
+    AnalysisEngine
+        │
+        ▼
+    RuleEngine
+        │
+        ▼
+    InsightEngine
+        │
+        ▼
+    RecommendationService
+        │
+        ▼
+    ReportBuilder
+        │
+        ▼
+    HTMLReportEngine
+        │
+        ▼
+    PDFReportEngine (optional)
+        │
+        ▼
+    JSONReportEngine (optional)
+        │
+        ▼
+    ReportStorageService (optional)
+        │
+        ▼
+    ReportValidationService
+        │
+        ▼
+    ReportArchiveService
+        │
+        ▼
+    ReportIndexService
     """
 
     def __init__(self) -> None:
@@ -76,6 +97,14 @@ class ReportPipeline:
 
         self._json_engine = JSONReportEngine()
 
+        self._storage_service = ReportStorageService()
+
+        self._validation_service = ReportValidationService()
+
+        self._archive_service = ReportArchiveService()
+
+        self._index_service = ReportIndexService()
+
     def run(
         self,
         *,
@@ -90,6 +119,7 @@ class ReportPipeline:
         generate_json: bool = True,
         json_output_path: str = "reports/report.json",
         return_package: bool = False,
+        persist_reports: bool = False,
     ) -> (
         tuple[
             ReportContext,
@@ -106,7 +136,11 @@ class ReportPipeline:
         Set return_package=True to return a ReportPackage
         containing all generated report artifacts.
         """
-
+        if dataframe.empty:
+            raise ValueError(
+                "Cannot generate reports from an empty DataFrame."
+            )
+        
         dataset = self._dataset_service.build(
             dataframe,
             file_name=file_name,
@@ -141,6 +175,7 @@ class ReportPipeline:
                 file_path
             )
             or file_name
+            or "dataset"
         )
 
         context = self._report_builder.build(
@@ -184,38 +219,96 @@ class ReportPipeline:
                 output_path=json_output_path,
             )
 
-        if return_package:
+        if not return_package:
 
-            package = ReportPackage(
-                metadata=context.metadata,
-                html_report=html_report,
-                pdf_report=pdf_report,
-                json_report_path=json_path,
+            return (
+                context,
+                html_report,
+                pdf_path,
+            )
+
+        package = ReportPackage(
+            metadata=context.metadata,
+            html_report=html_report,
+            pdf_report=pdf_report,
+            json_report_path=json_path,
+        )
+
+        if persist_reports:
+
+            report_directory = (
+                Path("reports")
+                / context.metadata.report_id
+            )
+
+            package = self._storage_service.save(
+                package=package,
+                output_directory=report_directory,
             )
 
             package.add_artifact(
-                "html",
-                "IN_MEMORY",
+                "report_directory",
+                str(report_directory),
             )
 
-            if pdf_path:
+            validation = (
+                self._validation_service.validate(
+                    report_directory
+                )
+            )
 
-                package.add_artifact(
-                    "pdf",
-                    pdf_path,
+            # ValidationResult returns collected errors instead of
+            # raising exceptions.
+            if validation.has_errors():
+
+                raise RuntimeError(
+                    "Generated report package failed validation:\n"
+                    + "\n".join(validation.errors)
                 )
 
-            if json_path:
-
-                package.add_artifact(
-                    "json",
-                    json_path,
+            archive_path = (
+                self._archive_service.archive(
+                    report_directory
                 )
+            )
 
-            return package
+            package.add_artifact(
+                "archive",
+                str(archive_path),
+            )
 
-        return (
-            context,
-            html_report,
-            pdf_path,
-        )
+            entry = ReportIndexEntry(
+                report_id=context.metadata.report_id,
+                title=context.metadata.title,
+                dataset_name=dataset_name,
+                version=context.metadata.version,
+                generated_at=context.metadata.generated_at,
+                directory=str(report_directory),
+                archive_path=str(archive_path),
+                formats=package.available_formats(),
+            )
+
+            self._index_service.register(
+                entry,
+            )
+
+        #
+        # Ensure generated artifacts are registered even when
+        # persist_reports=False.
+        #
+
+        if pdf_path is not None and "pdf" not in package.artifacts:
+
+            package.add_artifact(
+                "pdf",
+                pdf_path,
+            )
+
+        if json_path is not None and "json" not in package.artifacts:
+
+            package.add_artifact(
+                "json",
+                json_path,
+            )
+
+        return package

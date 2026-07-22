@@ -114,427 +114,447 @@ class HTMLReportEngine:
             html=html,
         )
 
-# ============================================================
-# Header
-# ============================================================
+    # ============================================================
+    # Header
+    # ============================================================
 
-def _build_header(
-    self,
-    context: ReportContext,
-) -> str:
+    def _build_header(
+        self,
+        context: ReportContext,
+    ) -> str:
 
-    metadata = context.metadata
-    dataset = context.dataset
+        metadata = context.metadata
+        dataset = context.dataset
 
-    return f"""
-<div class="section">
+        return f"""
+    <div class="section">
 
-<h1>{metadata.title}</h1>
+    <h1>{metadata.title}</h1>
 
-<h3>Enterprise Data Analysis Report</h3>
+    <h3>Enterprise Data Analysis Report</h3>
 
-<table>
+    <table>
 
-<tr>
-<td><strong>Dataset</strong></td>
-<td>{dataset.file.name}</td>
-</tr>
+    <tr>
+    <td><strong>Dataset</strong></td>
+    <td>{dataset.file.name}</td>
+    </tr>
 
-<tr>
-<td><strong>Rows</strong></td>
-<td>{dataset.structure.total_rows:,}</td>
-</tr>
+    <tr>
+    <td><strong>Rows</strong></td>
+    <td>{dataset.structure.total_rows:,}</td>
+    </tr>
 
-<tr>
-<td><strong>Columns</strong></td>
-<td>{dataset.structure.total_columns:,}</td>
-</tr>
+    <tr>
+    <td><strong>Columns</strong></td>
+    <td>{dataset.structure.total_columns:,}</td>
+    </tr>
 
-<tr>
-<td><strong>Format</strong></td>
-<td>{dataset.file.file_format}</td>
-</tr>
+    <tr>
+    <td><strong>Format</strong></td>
+    <td>{dataset.file.file_format}</td>
+    </tr>
 
-<tr>
-<td><strong>Generated</strong></td>
-<td>{metadata.generated_at.strftime("%d %B %Y %H:%M:%S")}</td>
-</tr>
+    <tr>
+    <td><strong>Generated</strong></td>
+    <td>{metadata.generated_at.strftime("%d %B %Y %H:%M:%S")}</td>
+    </tr>
 
-</table>
+    </table>
 
-</div>
-"""
-
-# ============================================================
-# Quality
-# ============================================================
-
-def _build_quality_section(
-    self,
-    context: ReportContext,
-) -> str:
-
-    quality = context.quality
-    summary = quality.summary
-
-    return f"""
-<div class="section">
-
-<h2>Dataset Quality</h2>
-
-<table>
-
-<tr>
-<th>Metric</th>
-<th>Value</th>
-</tr>
-
-<tr>
-<td>Quality Score</td>
-<td>{summary.score:.2f}</td>
-</tr>
-
-<tr>
-<td>Quality Grade</td>
-<td>{summary.grade}</td>
-</tr>
-
-<tr>
-<td>Total Issues</td>
-<td>{summary.total_issues}</td>
-</tr>
-
-<tr>
-<td>Critical Issues</td>
-<td>{summary.critical_issues}</td>
-</tr>
-
-<tr>
-<td>Warnings</td>
-<td>{summary.warning_issues}</td>
-</tr>
-
-</table>
-
-</div>
-"""
+    </div>
+    """
 
     # ============================================================
-# Insights
-# ============================================================
+    # Quality
+    # ============================================================
 
-def _build_insight_section(
-    self,
-    context: ReportContext,
-) -> str:
+    def _build_quality_section(
+        self,
+        context: ReportContext,
+    ) -> str:
 
-    report = context.insights
+        quality = context.quality
+        summary = quality.summary
 
-    html = """
-<div class="section">
+        missing_values = quality.missing.total_missing
+        duplicate_rows = quality.duplicates.duplicate_rows
+        duplicate_columns = quality.duplicates.duplicate_columns
+        outlier_columns = len(quality.outliers.columns)
 
-<h2>AI Insights</h2>
-"""
+        return f"""
+    <div class="section">
 
-    if not report.insights:
+    <h2>Dataset Quality</h2>
 
-        html += """
-<p>No insights were generated.</p>
-"""
+    <table>
 
-    else:
+    <tr>
+    <th>Metric</th>
+    <th>Value</th>
+    </tr>
 
-        for insight in report.insights:
+    <tr>
+    <td>Quality Score</td>
+    <td>{summary.score:.2f}</td>
+    </tr>
 
-            html += f"""
-<div class="card">
+    <tr>
+    <td>Quality Grade</td>
+    <td>{summary.grade}</td>
+    </tr>
 
-<h3>{insight.title}</h3>
+    <tr>
+    <td>Total Rows</td>
+    <td>{summary.total_rows:,}</td>
+    </tr>
 
-<p>
-<strong>Category:</strong>
-{insight.category}
-</p>
+    <tr>
+    <td>Total Columns</td>
+    <td>{summary.total_columns:,}</td>
+    </tr>
 
-<p>
-<strong>Severity:</strong>
-{insight.severity}
-</p>
+    <tr>
+    <td>Missing Values</td>
+    <td>{missing_values:,}</td>
+    </tr>
 
-<p>
-{insight.description}
-</p>
-"""
+    <tr>
+    <td>Duplicate Rows</td>
+    <td>{duplicate_rows:,}</td>
+    </tr>
 
-            if getattr(insight, "recommendation", None):
+    <tr>
+    <td>Duplicate Columns</td>
+    <td>{duplicate_columns:,}</td>
+    </tr>
 
-                html += f"""
-<p>
+    <tr>
+    <td>Columns With Outliers</td>
+    <td>{outlier_columns}</td>
+    </tr>
 
-<strong>Recommendation:</strong>
+    </table>
 
-{insight.recommendation}
+    </div>
+    """
 
-</p>
-"""
+    # ============================================================
+    # Insights
+    # ============================================================
+
+    def _build_insight_section(
+        self,
+        context: ReportContext,
+    ) -> str:
+
+        report = context.insights
+
+        html = """
+    <div class="section">
+
+    <h2>AI Insights</h2>
+    """
+
+        if not report.insights:
 
             html += """
-</div>
-"""
+    <p>No insights were generated.</p>
+    """
 
-    html += """
-</div>
-"""
+        else:
 
-    return html
-
-    # ============================================================
-# Profiling
-# ============================================================
-
-def _build_profile_section(
-    self,
-    context: ReportContext,
-) -> str:
-
-    profiling = context.profiling
-    summary = profiling.summary
-
-    return f"""
-<div class="section">
-
-<h2>Profiling Summary</h2>
-
-<table>
-
-<tr>
-<th>Metric</th>
-<th>Value</th>
-</tr>
-
-<tr>
-<td>Total Columns</td>
-<td>{summary.total_columns}</td>
-</tr>
-
-<tr>
-<td>Numeric Columns</td>
-<td>{summary.numeric_columns}</td>
-</tr>
-
-<tr>
-<td>Categorical Columns</td>
-<td>{summary.categorical_columns}</td>
-</tr>
-
-<tr>
-<td>Datetime Columns</td>
-<td>{summary.datetime_columns}</td>
-</tr>
-
-<tr>
-<td>Boolean Columns</td>
-<td>{summary.boolean_columns}</td>
-</tr>
-
-<tr>
-<td>Text Columns</td>
-<td>{summary.text_columns}</td>
-</tr>
-
-</table>
-
-</div>
-"""
-
-   # ============================================================
-# Correlation
-# ============================================================
-
-def _build_correlation_section(
-    self,
-    context: ReportContext,
-) -> str:
-
-    correlation = context.correlation
-    summary = correlation.summary
-
-    return f"""
-<div class="section">
-
-<h2>Correlation Summary</h2>
-
-<table>
-
-<tr>
-<th>Metric</th>
-<th>Value</th>
-</tr>
-
-<tr>
-<td>Method</td>
-<td>{summary.method}</td>
-</tr>
-
-<tr>
-<td>Threshold</td>
-<td>{summary.threshold}</td>
-</tr>
-
-<tr>
-<td>Numeric Columns</td>
-<td>{summary.total_numeric_columns}</td>
-</tr>
-
-<tr>
-<td>Strong Positive</td>
-<td>{summary.strong_positive_count}</td>
-</tr>
-
-<tr>
-<td>Strong Negative</td>
-<td>{summary.strong_negative_count}</td>
-</tr>
-
-<tr>
-<td>Highly Correlated Pairs</td>
-<td>{len(correlation.highly_correlated_pairs)}</td>
-</tr>
-
-</table>
-
-</div>
-"""
-
-    # ============================================================
-# Visualization
-# ============================================================
-
-def _build_visualization_section(
-    self,
-    context: ReportContext,
-) -> str:
-
-    visualization = context.visualization
-
-    html = """
-<div class="section">
-
-<h2>Visualization Summary</h2>
-"""
-
-    if not visualization.categories:
-
-        html += """
-<p>No visualizations generated.</p>
-"""
-
-    else:
-
-        for category in visualization.categories:
-
-            html += f"""
-<h3>{category.title}</h3>
-
-<ul>
-"""
-
-            for chart in category.charts:
+            for insight in report.insights:
 
                 html += f"""
-<li>
+    <div class="card">
 
-<strong>{chart.title}</strong>
+    <h3>{insight.title}</h3>
 
-({chart.chart_type})
+    <p>
+    <strong>Category:</strong>
+    {insight.category}
+    </p>
 
-"""
+    <p>
+    <strong>Severity:</strong>
+    {insight.severity}
+    </p>
 
-                if chart.description:
+    <p>
+    {insight.description}
+    </p>
+    """
+
+                if getattr(insight, "recommendation", None):
 
                     html += f"""
-<br>
+    <p>
 
-<small>{chart.description}</small>
-"""
+    <strong>Recommendation:</strong>
+
+    {insight.recommendation}
+
+    </p>
+    """
 
                 html += """
-</li>
-"""
-
-            html += """
-</ul>
-"""
-
-    html += """
-</div>
-"""
-
-    return html
-
-    # ============================================================
-# Recommendations
-# ============================================================
-
-def _build_recommendation_section(
-    self,
-    context: ReportContext,
-) -> str:
-
-    report = context.recommendations
-
-    recommendations = getattr(
-        report,
-        "recommendations",
-        [],
-    )
-
-    html = """
-<div class="section">
-
-<h2>Recommendations</h2>
-
-<ul>
-"""
-
-    if not recommendations:
+    </div>
+    """
 
         html += """
-<li>No recommendations generated.</li>
-"""
+    </div>
+    """
 
-    else:
-
-        for recommendation in recommendations:
-
-            html += f"""
-<li>{recommendation}</li>
-"""
-
-    html += """
-</ul>
-
-</div>
-"""
-
-    return html
+        return html
 
     # ============================================================
-# Footer
-# ============================================================
+    # Profiling
+    # ============================================================
 
-def _build_footer(self) -> str:
+    def _build_profile_section(
+        self,
+        context: ReportContext,
+    ) -> str:
 
-    return """
-<div class="footer">
+        profiling = context.profiling
+        summary = profiling.summary
 
-<hr>
+        return f"""
+    <div class="section">
 
-<p>
+    <h2>Profiling Summary</h2>
 
-Generated by <strong>InsightPilot AI</strong>
+    <table>
 
-</p>
+    <tr>
+    <th>Metric</th>
+    <th>Value</th>
+    </tr>
 
-</div>
-"""
+    <tr>
+    <td>Total Columns</td>
+    <td>{summary.total_columns}</td>
+    </tr>
+
+    <tr>
+    <td>Numeric Columns</td>
+    <td>{summary.numeric_columns}</td>
+    </tr>
+
+    <tr>
+    <td>Categorical Columns</td>
+    <td>{summary.categorical_columns}</td>
+    </tr>
+
+    <tr>
+    <td>Datetime Columns</td>
+    <td>{summary.datetime_columns}</td>
+    </tr>
+
+    <tr>
+    <td>Boolean Columns</td>
+    <td>{summary.boolean_columns}</td>
+    </tr>
+
+    <tr>
+    <td>Text Columns</td>
+    <td>{summary.text_columns}</td>
+    </tr>
+
+    </table>
+
+    </div>
+    """
+
+    # ============================================================
+    # Correlation
+    # ============================================================
+
+    def _build_correlation_section(
+        self,
+        context: ReportContext,
+    ) -> str:
+
+        correlation = context.correlation
+        summary = correlation.summary
+
+        return f"""
+    <div class="section">
+
+    <h2>Correlation Summary</h2>
+
+    <table>
+
+    <tr>
+    <th>Metric</th>
+    <th>Value</th>
+    </tr>
+
+    <tr>
+    <td>Method</td>
+    <td>{summary.method}</td>
+    </tr>
+
+    <tr>
+    <td>Threshold</td>
+    <td>{summary.threshold}</td>
+    </tr>
+
+    <tr>
+    <td>Numeric Columns</td>
+    <td>{summary.total_numeric_columns}</td>
+    </tr>
+
+    <tr>
+    <td>Strong Positive</td>
+    <td>{summary.strong_positive_count}</td>
+    </tr>
+
+    <tr>
+    <td>Strong Negative</td>
+    <td>{summary.strong_negative_count}</td>
+    </tr>
+
+    <tr>
+    <td>Highly Correlated Pairs</td>
+    <td>{len(correlation.highly_correlated_pairs)}</td>
+    </tr>
+
+    </table>
+
+    </div>
+    """
+
+    # ============================================================
+    # Visualization
+    # ============================================================
+
+    def _build_visualization_section(
+        self,
+        context: ReportContext,
+    ) -> str:
+
+        visualization = context.visualization
+
+        html = """
+    <div class="section">
+
+    <h2>Visualization Summary</h2>
+    """
+
+        if not visualization.categories:
+
+            html += """
+    <p>No visualizations generated.</p>
+    """
+
+        else:
+
+            for category in visualization.categories:
+
+                html += f"""
+    <h3>{category.title}</h3>
+
+    <ul>
+    """
+
+                for chart in category.charts:
+
+                    html += f"""
+    <li>
+
+    <strong>{chart.title}</strong>
+
+    ({chart.chart_type})
+
+    """
+
+                    if chart.description:
+
+                        html += f"""
+    <br>
+
+    <small>{chart.description}</small>
+    """
+
+                    html += """
+    </li>
+    """
+
+                html += """
+    </ul>
+    """
+
+        html += """
+    </div>
+    """
+
+        return html
+
+    # ============================================================
+    # Recommendations
+    # ============================================================
+
+    def _build_recommendation_section(
+        self,
+        context: ReportContext,
+    ) -> str:
+
+        report = context.recommendations
+
+        recommendations = getattr(
+            report,
+            "recommendations",
+            [],
+        )
+
+        html = """
+    <div class="section">
+
+    <h2>Recommendations</h2>
+
+    <ul>
+    """
+
+        if not recommendations:
+
+            html += """
+    <li>No recommendations generated.</li>
+    """
+
+        else:
+
+            for recommendation in recommendations:
+
+                html += f"""
+    <li>{recommendation}</li>
+    """
+
+        html += """
+    </ul>
+
+    </div>
+    """
+
+        return html
+
+    # ============================================================
+    # Footer
+    # ============================================================
+
+    def _build_footer(self) -> str:
+
+        return """
+    <div class="footer">
+
+    <hr>
+
+    <p>
+
+    Generated by <strong>InsightPilot AI</strong>
+
+    </p>
+
+    </div>
+    """
