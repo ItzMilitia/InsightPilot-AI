@@ -176,6 +176,73 @@ class ReportIndex:
             for entry in self.entries
             if entry.version == version
         ]
+    def find_by_format(
+        self,
+        report_format: str,
+    ) -> list[ReportIndexEntry]:
+        """
+        Find reports containing a specific format.
+
+        Example
+        -------
+        HTML
+        PDF
+        JSON
+        """
+
+        report_format = report_format.upper()
+
+        return [
+            entry
+            for entry in self.entries
+            if report_format in (
+                fmt.upper()
+                for fmt in entry.formats
+            )
+        ]
+
+
+    def find_by_date_range(
+        self,
+        start: str,
+        end: str,
+    ) -> list[ReportIndexEntry]:
+        """
+        Return reports generated between two ISO timestamps.
+
+        Parameters
+        ----------
+        start
+            Inclusive ISO datetime.
+
+        end
+            Inclusive ISO datetime.
+        """
+
+        return [
+            entry
+            for entry in self.entries
+            if start <= entry.generated_at <= end
+        ]
+
+
+    def list_sorted(
+        self,
+        reverse: bool = True,
+    ) -> list[ReportIndexEntry]:
+        """
+        Return reports sorted by generation time.
+
+        Default
+        -------
+        Newest first.
+        """
+
+        return sorted(
+            self.entries,
+            key=lambda entry: entry.generated_at,
+            reverse=reverse,
+        )
 
     # ======================================================
     # Convenience Helpers

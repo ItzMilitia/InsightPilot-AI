@@ -10,7 +10,7 @@ from backend.engines.insight_engine import InsightEngine
 from backend.engines.json_report_engine import JSONReportEngine
 from backend.engines.pdf_report_engine import PDFReportEngine
 from backend.engines.rule_engine import RuleEngine
-
+from backend.services.report_registry import ReportRegistry
 from backend.models.html_report import HTMLReport
 from backend.models.pdf_report import PDFReport
 from backend.models.report_context import ReportContext
@@ -77,7 +77,12 @@ class ReportPipeline:
     ReportIndexService
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        registry: ReportRegistry | None = None,
+    ):
+
+        self._registry = registry or ReportRegistry()
 
         self._dataset_service = DatasetService()
 
@@ -233,6 +238,8 @@ class ReportPipeline:
             pdf_report=pdf_report,
             json_report_path=json_path,
         )
+        
+        self._registry.register(package)
 
         if persist_reports:
 
@@ -312,3 +319,10 @@ class ReportPipeline:
             )
 
         return package
+    
+    @property
+    def registry(self) -> ReportRegistry:
+        """
+        Return the report registry associated with this pipeline.
+        """
+        return self._registry
