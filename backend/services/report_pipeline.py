@@ -9,7 +9,10 @@ from backend.engines.html_report_engine import HTMLReportEngine
 from backend.engines.insight_engine import InsightEngine
 from backend.engines.pdf_report_engine import PDFReportEngine
 from backend.engines.rule_engine import RuleEngine
+from backend.engines.json_report_engine import JSONReportEngine
 
+from backend.models.pdf_report import PDFReport
+from backend.models.report_package import ReportPackage
 from backend.models.html_report import HTMLReport
 from backend.models.report_context import ReportContext
 
@@ -71,6 +74,8 @@ class ReportPipeline:
 
         self._pdf_engine = PDFReportEngine()
 
+        self._json_engine = JSONReportEngine()
+
     def run(
         self,
         *,
@@ -82,13 +87,24 @@ class ReportPipeline:
         required_columns: list[str] | None = None,
         generate_pdf: bool = False,
         pdf_output_path: str = "reports/report.pdf",
-    ) -> tuple[
-        ReportContext,
-        HTMLReport,
-        str | None,
-    ]:
+        generate_json: bool = True,
+        json_output_path: str = "reports/report.json",
+        return_package: bool = False,
+    ) -> (
+        tuple[
+            ReportContext,
+            HTMLReport,
+            str | None,
+        ]
+        | ReportPackage
+    ):
         """
         Execute the complete reporting pipeline.
+
+        By default, the legacy API is preserved.
+
+        Set return_package=True to return a ReportPackage
+        containing all generated report artifacts.
         """
 
         dataset = self._dataset_service.build(
@@ -140,6 +156,7 @@ class ReportPipeline:
             context,
         )
 
+        pdf_report: PDFReport | None = None
         pdf_path: str | None = None
 
         if generate_pdf:
@@ -151,12 +168,51 @@ class ReportPipeline:
                 exist_ok=True,
             )
 
-            self._pdf_engine.generate(
+            pdf_report = self._pdf_engine.generate(
                 html_report=html_report,
                 output_path=str(output),
             )
 
-            pdf_path = str(output)
+            pdf_path = pdf_report.file_path
+
+        json_path: str | None = None
+
+        if generate_json:
+
+            json_path = self._json_engine.generate(
+                report_context=context,
+                output_path=json_output_path,
+            )
+
+        if return_package:
+
+            package = ReportPackage(
+                metadata=context.metadata,
+                html_report=html_report,
+                pdf_report=pdf_report,
+                json_report_path=json_path,
+            )
+
+            package.add_artifact(
+                "html",
+                "IN_MEMORY",
+            )
+
+            if pdf_path:
+
+                package.add_artifact(
+                    "pdf",
+                    pdf_path,
+                )
+
+            if json_path:
+
+                package.add_artifact(
+                    "json",
+                    json_path,
+                )
+
+            return package
 
         return (
             context,
