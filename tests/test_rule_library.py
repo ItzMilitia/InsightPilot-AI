@@ -22,101 +22,72 @@ def test_library_initialization():
 
 def test_register_generic_pack():
     """
-    GenericRulePack should be registered correctly.
+    Generic Rule Pack should populate the library.
     """
 
-    library = RuleLibrary()
+    library = RuleLibrary.from_generic_pack()
 
-    library.register(
-        "generic",
-        GenericRulePack,
+    assert library.rule_count > 0
+
+    assert all(
+        isinstance(rule, BaseRule)
+        for rule in library.rules
     )
-
-    pack = library.get("generic")
-
-    assert pack is GenericRulePack
 
 
 def test_register_banking_pack():
     """
-    BankingRulePack should be registered correctly.
+    Banking Rule Pack should populate the library.
     """
 
-    library = RuleLibrary()
+    library = RuleLibrary.from_banking_pack()
 
-    library.register(
-        "banking",
-        BankingRulePack,
+    assert library.rule_count > 0
+
+    assert all(
+        isinstance(rule, BaseRule)
+        for rule in library.rules
     )
-
-    pack = library.get("banking")
-
-    assert pack is BankingRulePack
 
 
 def test_duplicate_registration_overwrites():
     """
-    Registering the same key twice should overwrite
-    the previous registration.
+    Multiple rules can be registered.
     """
 
     library = RuleLibrary()
 
-    library.register(
-        "pack",
-        GenericRulePack,
-    )
+    rules = RuleLibrary.from_generic_pack().rules
 
-    library.register(
-        "pack",
-        BankingRulePack,
-    )
+    library.register(rules[0])
+    library.register(rules[0])
 
-    assert library.get("pack") is BankingRulePack
-
-
-def test_get_unknown_pack_raises():
-    """
-    Unknown pack names should raise KeyError.
-    """
-
-    library = RuleLibrary()
-
-    with pytest.raises(KeyError):
-        library.get("unknown")
+    assert library.rule_count == 2
 
 
 def test_multiple_registrations():
     """
-    Library should store multiple packs.
+    Library should register multiple rules.
     """
 
     library = RuleLibrary()
 
-    library.register(
-        "generic",
-        GenericRulePack,
-    )
+    rules = RuleLibrary.from_generic_pack().rules
 
-    library.register(
-        "banking",
-        BankingRulePack,
-    )
+    library.register_many(rules)
 
-    assert library.get("generic") is GenericRulePack
-    assert library.get("banking") is BankingRulePack
+    assert library.rule_count == len(rules)
 
 
 def test_get_returns_same_registered_class():
     """
-    get() should return exactly the registered class.
+    Registered rule instances should be preserved.
     """
 
     library = RuleLibrary()
 
-    library.register(
-        "generic",
-        GenericRulePack,
-    )
+    rule = RuleLibrary.from_generic_pack().rules[0]
 
-    assert library.get("generic") == GenericRulePack
+    library.register(rule)
+
+    assert library.rules[0] is rule

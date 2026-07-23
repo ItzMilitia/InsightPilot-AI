@@ -10,6 +10,9 @@ from backend.engines.insight_engine import InsightEngine
 from backend.engines.json_report_engine import JSONReportEngine
 from backend.engines.pdf_report_engine import PDFReportEngine
 from backend.engines.rule_engine import RuleEngine
+from backend.engines.report_comparison_engine import (
+    ReportComparisonEngine,
+)
 from backend.services.report_registry import ReportRegistry
 from backend.models.html_report import HTMLReport
 from backend.models.pdf_report import PDFReport
@@ -101,6 +104,10 @@ class ReportPipeline:
         self._pdf_engine = PDFReportEngine()
 
         self._json_engine = JSONReportEngine()
+
+        self._comparison_engine = (
+            ReportComparisonEngine()
+        )
 
         self._storage_service = ReportStorageService()
 
@@ -320,6 +327,33 @@ class ReportPipeline:
 
         return package
     
+    def compare_reports(
+            self,
+            baseline: ReportContext,
+            comparison: ReportContext,
+        ):
+            """
+            Compare two generated reports.
+
+            Parameters
+            ----------
+            baseline:
+                Original report.
+
+            comparison:
+                Newly generated report.
+
+            Returns
+            -------
+            ReportComparison
+                Comparison between the supplied reports.
+            """
+
+            return self._comparison_engine.analyze(
+                baseline,
+                comparison,
+            )
+
     @property
     def registry(self) -> ReportRegistry:
         """
