@@ -1,0 +1,22 @@
+{
+    "metadata": {
+        "report_id": "381bc4e9-e39d-4e47-b425-ad0bbe3a132c",
+        "title": "InsightPilot AI Report",
+        "version": "0.9.0",
+        "generated_at": "2026-07-23T22:22:51.610412+00:00",
+        "generated_by": "InsightPilot AI",
+        "report_type": "HTML",
+        "status": "Completed",
+        "author": null,
+        "dataset_name": "bank_customers.csv",
+        "execution_time": null,
+        "tags": [],
+        "metadata": {}
+    },
+    "formats": [
+        "HTML"
+    ],
+    "artifacts": {
+        "html": "reports\\381bc4e9-e39d-4e47-b425-ad0bbe3a132c\\report.html"
+    }
+}

@@ -396,7 +396,7 @@ class QualityEngine(BaseEngine):
             )
 
             recommendations.append(
-                f"Fill missing values in column(s): {columns}."
+                f"Remove {report.duplicates.duplicate_rows} duplicate row(s)."
             )
 
         # -----------------------------------------
@@ -462,7 +462,7 @@ class QualityEngine(BaseEngine):
                 "Minor cleaning is recommended."
             )
 
-        elif report.quality_score >= 60:
+        elif report.summary.score >= 60:
 
             recommendations.append(
                 "Dataset quality is Fair. "

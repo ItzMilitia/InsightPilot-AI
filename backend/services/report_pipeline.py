@@ -27,7 +27,17 @@ from backend.services.report_builder import ReportBuilder
 from backend.services.report_index_service import ReportIndexService
 from backend.services.report_storage_service import ReportStorageService
 from backend.services.report_validation_service import ReportValidationService
+from backend.services.report_history_service import (
+    ReportHistoryService,
+)
 
+from backend.services.report_version_service import (
+    ReportVersionService,
+)
+
+from backend.services.report_explorer_service import (
+    ReportExplorerService,
+)
 
 class ReportPipeline:
     """
@@ -116,6 +126,21 @@ class ReportPipeline:
         self._archive_service = ReportArchiveService()
 
         self._index_service = ReportIndexService()
+
+        self._history_service = ReportHistoryService(
+            registry=self._registry,
+            index_service=self._index_service,
+            storage_service=self._storage_service,
+        )
+
+        self._version_service = ReportVersionService(
+            history_service=self._history_service,
+        )
+
+        self._explorer_service = ReportExplorerService(
+            history_service=self._history_service,
+            version_service=self._version_service,
+        )
 
     def run(
         self,
@@ -296,7 +321,7 @@ class ReportPipeline:
                 title=context.metadata.title,
                 dataset_name=dataset_name,
                 version=context.metadata.version,
-                generated_at=context.metadata.generated_at,
+                generated_at=context.metadata.generated_at.isoformat(),
                 directory=str(report_directory),
                 archive_path=str(archive_path),
                 formats=package.available_formats(),
@@ -360,3 +385,29 @@ class ReportPipeline:
         Return the report registry associated with this pipeline.
         """
         return self._registry
+    
+    @property
+    def history_service(self) -> ReportHistoryService:
+        """
+        Return the report history service.
+        """
+
+        return self._history_service
+
+
+    @property
+    def version_service(self) -> ReportVersionService:
+        """
+        Return the report version service.
+        """
+
+        return self._version_service
+
+
+    @property
+    def explorer_service(self) -> ReportExplorerService:
+        """
+        Return the report explorer service.
+        """
+
+        return self._explorer_service

@@ -262,7 +262,7 @@ class ReportValidationService:
 
             artifact = Path(path)
 
-            if not artifact.is_absolute():
+            if not artifact.exists():
 
                 artifact = directory / artifact
 
