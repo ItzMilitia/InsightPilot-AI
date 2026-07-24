@@ -233,6 +233,34 @@
                 "PDF",
                 "JSON"
             ]
+        },
+        {
+            "report_id": "09f2da26-8e75-46b2-900a-497162955ec0",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "new_bank_customer.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T21:37:23.066597+00:00",
+            "directory": "reports\\09f2da26-8e75-46b2-900a-497162955ec0",
+            "archive_path": "reports\\09f2da26-8e75-46b2-900a-497162955ec0\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "87655f6f-66d5-43fa-a7fc-50f8aadda72d",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T21:37:54.306036+00:00",
+            "directory": "reports\\87655f6f-66d5-43fa-a7fc-50f8aadda72d",
+            "archive_path": "reports\\87655f6f-66d5-43fa-a7fc-50f8aadda72d\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
         }
     ]
 }

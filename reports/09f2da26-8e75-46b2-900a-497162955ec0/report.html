@@ -1,0 +1,612 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+
+    <meta charset="UTF-8">
+
+    <title>InsightPilot AI Report</title>
+
+    <style>
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f6f8;
+        margin: 40px;
+        color: #222;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    h1 {
+        color: #0f62fe;
+    }
+
+    .section {
+        background: white;
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    }
+
+    table {
+        width:100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border:1px solid #ddd;
+        padding:8px;
+    }
+
+    th {
+        background:#f0f0f0;
+    }
+
+    .card {
+        border-left:5px solid #0f62fe;
+        padding:15px;
+        margin-bottom:12px;
+        background:#fafafa;
+    }
+
+    .footer {
+        margin-top:40px;
+        text-align:center;
+        color:#777;
+    }
+
+    </style>
+
+    </head>
+
+    <body>
+
+    <div class="container">
+
+    
+    <div class="section">
+
+    <h1>InsightPilot AI Report</h1>
+
+    <h3>Enterprise Data Analysis Report</h3>
+
+    <table>
+
+    <tr>
+    <td><strong>Dataset</strong></td>
+    <td>new_bank_customer.csv</td>
+    </tr>
+
+    <tr>
+    <td><strong>Rows</strong></td>
+    <td>15</td>
+    </tr>
+
+    <tr>
+    <td><strong>Columns</strong></td>
+    <td>11</td>
+    </tr>
+
+    <tr>
+    <td><strong>Format</strong></td>
+    <td>csv</td>
+    </tr>
+
+    <tr>
+    <td><strong>Generated</strong></td>
+    <td>24 July 2026 21:37:23</td>
+    </tr>
+
+    </table>
+
+    </div>
+    
+
+    
+    <div class="section">
+
+    <h2>Dataset Quality</h2>
+
+    <table>
+
+    <tr>
+    <th>Metric</th>
+    <th>Value</th>
+    </tr>
+
+    <tr>
+    <td>Quality Score</td>
+    <td>97.70</td>
+    </tr>
+
+    <tr>
+    <td>Quality Grade</td>
+    <td>Excellent</td>
+    </tr>
+
+    <tr>
+    <td>Total Rows</td>
+    <td>15</td>
+    </tr>
+
+    <tr>
+    <td>Total Columns</td>
+    <td>11</td>
+    </tr>
+
+    <tr>
+    <td>Missing Values</td>
+    <td>4</td>
+    </tr>
+
+    <tr>
+    <td>Duplicate Rows</td>
+    <td>0</td>
+    </tr>
+
+    <tr>
+    <td>Duplicate Columns</td>
+    <td>0</td>
+    </tr>
+
+    <tr>
+    <td>Columns With Outliers</td>
+    <td>1</td>
+    </tr>
+
+    </table>
+
+    </div>
+    
+
+    
+    <div class="section">
+
+    <h2>AI Insights</h2>
+    
+    <div class="card">
+
+    <h3>Dataset Quality Overview</h3>
+
+    <p>
+    <strong>Category:</strong>
+    Quality
+    </p>
+
+    <p>
+    <strong>Severity:</strong>
+    Info
+    </p>
+
+    <p>
+    The dataset achieved an overall quality score of 97.70 with grade 'Excellent'.
+    </p>
+    
+    <p>
+
+    <strong>Recommendation:</strong>
+
+    Review the Quality Report and resolve critical data quality issues before downstream analysis.
+
+    </p>
+    
+    </div>
+    
+    <div class="card">
+
+    <h3>Missing Values in 'age'</h3>
+
+    <p>
+    <strong>Category:</strong>
+    Missing Values
+    </p>
+
+    <p>
+    <strong>Severity:</strong>
+    Info
+    </p>
+
+    <p>
+    Column 'age' contains 1 missing values (6.67% of the dataset).
+    </p>
+    
+    <p>
+
+    <strong>Recommendation:</strong>
+
+    Consider imputing missing values, removing affected rows, or investigating the source of missing data.
+
+    </p>
+    
+    </div>
+    
+    <div class="card">
+
+    <h3>Missing Values in 'balance'</h3>
+
+    <p>
+    <strong>Category:</strong>
+    Missing Values
+    </p>
+
+    <p>
+    <strong>Severity:</strong>
+    Info
+    </p>
+
+    <p>
+    Column 'balance' contains 1 missing values (6.67% of the dataset).
+    </p>
+    
+    <p>
+
+    <strong>Recommendation:</strong>
+
+    Consider imputing missing values, removing affected rows, or investigating the source of missing data.
+
+    </p>
+    
+    </div>
+    
+    <div class="card">
+
+    <h3>Missing Values in 'last_login'</h3>
+
+    <p>
+    <strong>Category:</strong>
+    Missing Values
+    </p>
+
+    <p>
+    <strong>Severity:</strong>
+    Warning
+    </p>
+
+    <p>
+    Column 'last_login' contains 2 missing values (13.33% of the dataset).
+    </p>
+    
+    <p>
+
+    <strong>Recommendation:</strong>
+
+    Consider imputing missing values, removing affected rows, or investigating the source of missing data.
+
+    </p>
+    
+    </div>
+    
+    <div class="card">
+
+    <h3>Numeric Profile: age</h3>
+
+    <p>
+    <strong>Category:</strong>
+    Profiling
+    </p>
+
+    <p>
+    <strong>Severity:</strong>
+    Info
+    </p>
+
+    <p>
+    Column 'age' has mean=40.0000, median=38.5000, standard deviation=11.2113.
+    </p>
+    
+    <p>
+
+    <strong>Recommendation:</strong>
+
+    Review this column for skewness, outliers, or normalization before model training.
+
+    </p>
+    
+    </div>
+    
+    <div class="card">
+
+    <h3>Numeric Profile: balance</h3>
+
+    <p>
+    <strong>Category:</strong>
+    Profiling
+    </p>
+
+    <p>
+    <strong>Severity:</strong>
+    Info
+    </p>
+
+    <p>
+    Column 'balance' has mean=4360.9714, median=975.0500, standard deviation=6768.9617.
+    </p>
+    
+    <p>
+
+    <strong>Recommendation:</strong>
+
+    Review this column for skewness, outliers, or normalization before model training.
+
+    </p>
+    
+    </div>
+    
+    <div class="card">
+
+    <h3>Visualization Summary</h3>
+
+    <p>
+    <strong>Category:</strong>
+    Visualization
+    </p>
+
+    <p>
+    <strong>Severity:</strong>
+    Info
+    </p>
+
+    <p>
+    7 chart specifications have been generated for exploratory data analysis.
+    </p>
+    
+    <p>
+
+    <strong>Recommendation:</strong>
+
+    Review the generated visualizations before performing detailed statistical analysis or machine learning.
+
+    </p>
+    
+    </div>
+    
+    </div>
+    
+
+    
+    <div class="section">
+
+    <h2>Profiling Summary</h2>
+
+    <table>
+
+    <tr>
+    <th>Metric</th>
+    <th>Value</th>
+    </tr>
+
+    <tr>
+    <td>Total Columns</td>
+    <td>11</td>
+    </tr>
+
+    <tr>
+    <td>Numeric Columns</td>
+    <td>2</td>
+    </tr>
+
+    <tr>
+    <td>Categorical Columns</td>
+    <td>6</td>
+    </tr>
+
+    <tr>
+    <td>Datetime Columns</td>
+    <td>0</td>
+    </tr>
+
+    <tr>
+    <td>Boolean Columns</td>
+    <td>0</td>
+    </tr>
+
+    <tr>
+    <td>Text Columns</td>
+    <td>0</td>
+    </tr>
+
+    </table>
+
+    </div>
+    
+
+    
+    <div class="section">
+
+    <h2>Correlation Summary</h2>
+
+    <table>
+
+    <tr>
+    <th>Metric</th>
+    <th>Value</th>
+    </tr>
+
+    <tr>
+    <td>Method</td>
+    <td>pearson</td>
+    </tr>
+
+    <tr>
+    <td>Threshold</td>
+    <td>0.8</td>
+    </tr>
+
+    <tr>
+    <td>Numeric Columns</td>
+    <td>2</td>
+    </tr>
+
+    <tr>
+    <td>Strong Positive</td>
+    <td>0</td>
+    </tr>
+
+    <tr>
+    <td>Strong Negative</td>
+    <td>0</td>
+    </tr>
+
+    <tr>
+    <td>Highly Correlated Pairs</td>
+    <td>0</td>
+    </tr>
+
+    </table>
+
+    </div>
+    
+
+    
+    <div class="section">
+
+    <h2>Visualization Summary</h2>
+    
+    <h3>Data Quality</h3>
+
+    <ul>
+    
+    <li>
+
+    <strong>Missing Values</strong>
+
+    (bar)
+
+    
+    </li>
+    
+    </ul>
+    
+    <h3>Dataset Overview</h3>
+
+    <ul>
+    
+    <li>
+
+    <strong>Data Types</strong>
+
+    (pie)
+
+    
+    </li>
+    
+    </ul>
+    
+    <h3>Numeric Analysis</h3>
+
+    <ul>
+    
+    <li>
+
+    <strong>age Histogram</strong>
+
+    (histogram)
+
+    
+    </li>
+    
+    <li>
+
+    <strong>balance Histogram</strong>
+
+    (histogram)
+
+    
+    </li>
+    
+    <li>
+
+    <strong>age Box Plot</strong>
+
+    (boxplot)
+
+    
+    </li>
+    
+    <li>
+
+    <strong>balance Box Plot</strong>
+
+    (boxplot)
+
+    
+    </li>
+    
+    </ul>
+    
+    <h3>Correlation</h3>
+
+    <ul>
+    
+    <li>
+
+    <strong>Correlation Heatmap</strong>
+
+    (heatmap)
+
+    
+    </li>
+    
+    </ul>
+    
+    </div>
+    
+
+    
+    <div class="section">
+
+    <h2>Recommendations</h2>
+
+    <ul>
+    
+    <li>Recommendation(id='QUALITY-1', title='Data Quality Improvement', description='Remove 0 duplicate row(s).', category='Quality', priority=<RecommendationPriority.MEDIUM: 'Medium'>, impact=<BusinessImpact.MEDIUM: 'Medium'>, effort=<ImplementationEffort.LOW: 'Low'>, source_engine='QualityEngine', affected_columns=[], implementation_steps=[], metadata={})</li>
+    
+    <li>Recommendation(id='QUALITY-2', title='Data Quality Improvement', description='Investigate outliers in column(s): balance.', category='Quality', priority=<RecommendationPriority.MEDIUM: 'Medium'>, impact=<BusinessImpact.MEDIUM: 'Medium'>, effort=<ImplementationEffort.LOW: 'Low'>, source_engine='QualityEngine', affected_columns=[], implementation_steps=[], metadata={})</li>
+    
+    <li>Recommendation(id='QUALITY-3', title='Data Quality Improvement', description='Dataset quality is Excellent. Suitable for analytics and AI workloads.', category='Quality', priority=<RecommendationPriority.MEDIUM: 'Medium'>, impact=<BusinessImpact.MEDIUM: 'Medium'>, effort=<ImplementationEffort.LOW: 'Low'>, source_engine='QualityEngine', affected_columns=[], implementation_steps=[], metadata={})</li>
+    
+    <li>Recommendation(id='INSIGHT-1', title='Dataset Quality Overview', description='Review the Quality Report and resolve critical data quality issues before downstream analysis.', category='Quality', priority=<RecommendationPriority.LOW: 'Low'>, impact=<BusinessImpact.HIGH: 'High'>, effort=<ImplementationEffort.MEDIUM: 'Medium'>, source_engine='QualityEngine', affected_columns=[], implementation_steps=['Review the affected data.', 'Apply the recommended corrective action.', 'Re-run the analysis.'], metadata={})</li>
+    
+    <li>Recommendation(id='INSIGHT-2', title="Missing Values in 'age'", description='Consider imputing missing values, removing affected rows, or investigating the source of missing data.', category='Missing Values', priority=<RecommendationPriority.LOW: 'Low'>, impact=<BusinessImpact.HIGH: 'High'>, effort=<ImplementationEffort.MEDIUM: 'Medium'>, source_engine='QualityEngine', affected_columns=['age'], implementation_steps=['Review the affected data.', 'Apply the recommended corrective action.', 'Re-run the analysis.'], metadata={})</li>
+    
+    <li>Recommendation(id='INSIGHT-3', title="Missing Values in 'balance'", description='Consider imputing missing values, removing affected rows, or investigating the source of missing data.', category='Missing Values', priority=<RecommendationPriority.LOW: 'Low'>, impact=<BusinessImpact.HIGH: 'High'>, effort=<ImplementationEffort.MEDIUM: 'Medium'>, source_engine='QualityEngine', affected_columns=['balance'], implementation_steps=['Review the affected data.', 'Apply the recommended corrective action.', 'Re-run the analysis.'], metadata={})</li>
+    
+    <li>Recommendation(id='INSIGHT-4', title="Missing Values in 'last_login'", description='Consider imputing missing values, removing affected rows, or investigating the source of missing data.', category='Missing Values', priority=<RecommendationPriority.MEDIUM: 'Medium'>, impact=<BusinessImpact.HIGH: 'High'>, effort=<ImplementationEffort.MEDIUM: 'Medium'>, source_engine='QualityEngine', affected_columns=['last_login'], implementation_steps=['Review the affected data.', 'Apply the recommended corrective action.', 'Re-run the analysis.'], metadata={})</li>
+    
+    <li>Recommendation(id='INSIGHT-5', title='Numeric Profile: age', description='Review this column for skewness, outliers, or normalization before model training.', category='Profiling', priority=<RecommendationPriority.LOW: 'Low'>, impact=<BusinessImpact.HIGH: 'High'>, effort=<ImplementationEffort.MEDIUM: 'Medium'>, source_engine='ProfilingEngine', affected_columns=['age'], implementation_steps=['Review the affected data.', 'Apply the recommended corrective action.', 'Re-run the analysis.'], metadata={})</li>
+    
+    <li>Recommendation(id='INSIGHT-6', title='Numeric Profile: balance', description='Review this column for skewness, outliers, or normalization before model training.', category='Profiling', priority=<RecommendationPriority.LOW: 'Low'>, impact=<BusinessImpact.HIGH: 'High'>, effort=<ImplementationEffort.MEDIUM: 'Medium'>, source_engine='ProfilingEngine', affected_columns=['balance'], implementation_steps=['Review the affected data.', 'Apply the recommended corrective action.', 'Re-run the analysis.'], metadata={})</li>
+    
+    <li>Recommendation(id='INSIGHT-7', title='Visualization Summary', description='Review the generated visualizations before performing detailed statistical analysis or machine learning.', category='Visualization', priority=<RecommendationPriority.LOW: 'Low'>, impact=<BusinessImpact.HIGH: 'High'>, effort=<ImplementationEffort.MEDIUM: 'Medium'>, source_engine='VisualizationEngine', affected_columns=[], implementation_steps=['Review the affected data.', 'Apply the recommended corrective action.', 'Re-run the analysis.'], metadata={})</li>
+    
+    </ul>
+
+    </div>
+    
+
+    
+    <div class="footer">
+
+    <hr>
+
+    <p>
+
+    Generated by <strong>InsightPilot AI</strong>
+
+    </p>
+
+    </div>
+    
+
+    </div>
+
+    </body>
+
+    </html>
+    

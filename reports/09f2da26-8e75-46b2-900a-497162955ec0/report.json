@@ -1,0 +1,947 @@
+{
+    "metadata": {
+        "report_id": "09f2da26-8e75-46b2-900a-497162955ec0",
+        "title": "InsightPilot AI Report",
+        "version": "0.9.0",
+        "generated_at": "2026-07-24T21:37:23.066597+00:00",
+        "generated_by": "InsightPilot AI",
+        "report_type": "HTML",
+        "status": "Completed",
+        "author": null,
+        "dataset_name": "new_bank_customer.csv",
+        "execution_time": null,
+        "tags": [],
+        "metadata": {}
+    },
+    "dataset": {
+        "file": {
+            "name": "new_bank_customer.csv",
+            "path": null,
+            "file_format": "csv",
+            "file_size": null,
+            "memory_usage": "0.00 MB",
+            "encoding": null,
+            "checksum": null
+        },
+        "structure": {
+            "total_rows": 15,
+            "total_columns": 11,
+            "total_cells": 165
+        },
+        "column_types": {
+            "numeric": 2,
+            "categorical": 0,
+            "datetime": 0,
+            "boolean": 3,
+            "text": 6,
+            "other": 0
+        },
+        "preview": {
+            "rows": [
+                {
+                    "customer_id": "CUST001",
+                    "age": 45.0,
+                    "job": "management",
+                    "marital_status": "married",
+                    "education": "tertiary",
+                    "balance": 5042.5,
+                    "has_credit_card": true,
+                    "has_housing_loan": false,
+                    "has_personal_loan": false,
+                    "account_creation_date": "2021-05-12",
+                    "last_login": "2026-07-20 08:15:00"
+                },
+                {
+                    "customer_id": "CUST002",
+                    "age": 32.0,
+                    "job": "technician",
+                    "marital_status": "single",
+                    "education": "secondary",
+                    "balance": 120.0,
+                    "has_credit_card": true,
+                    "has_housing_loan": true,
+                    "has_personal_loan": false,
+                    "account_creation_date": "2022-11-03",
+                    "last_login": "2026-07-22 14:30:22"
+                },
+                {
+                    "customer_id": "CUST003",
+                    "age": 58.0,
+                    "job": "retired",
+                    "marital_status": "married",
+                    "education": "primary",
+                    "balance": 12050.75,
+                    "has_credit_card": false,
+                    "has_housing_loan": false,
+                    "has_personal_loan": false,
+                    "account_creation_date": "2018-02-19",
+                    "last_login": "2026-07-24 09:10:05"
+                },
+                {
+                    "customer_id": "CUST004",
+                    "age": 28.0,
+                    "job": "student",
+                    "marital_status": "single",
+                    "education": "secondary",
+                    "balance": 450.25,
+                    "has_credit_card": true,
+                    "has_housing_loan": false,
+                    "has_personal_loan": false,
+                    "account_creation_date": "2024-08-30",
+                    "last_login": "2026-07-24 10:45:12"
+                },
+                {
+                    "customer_id": "CUST005",
+                    "age": 39.0,
+                    "job": "admin.",
+                    "marital_status": "divorced",
+                    "education": "secondary",
+                    "balance": 3200.0,
+                    "has_credit_card": true,
+                    "has_housing_loan": true,
+                    "has_personal_loan": true,
+                    "account_creation_date": "2020-01-15",
+                    "last_login": "2026-07-21 16:20:00"
+                }
+            ],
+            "max_rows": 5
+        },
+        "metadata": {
+            "engine": "DatasetService",
+            "version": "8.3"
+        }
+    },
+    "quality": {
+        "summary": {
+            "score": 97.7,
+            "grade": "Excellent",
+            "total_rows": 15,
+            "total_columns": 11
+        },
+        "missing": {
+            "total_missing": 4,
+            "columns": {
+                "age": {
+                    "count": 1,
+                    "percentage": 6.67
+                },
+                "balance": {
+                    "count": 1,
+                    "percentage": 6.67
+                },
+                "last_login": {
+                    "count": 2,
+                    "percentage": 13.33
+                }
+            }
+        },
+        "duplicates": {
+            "duplicate_rows": 0,
+            "duplicate_columns": 0,
+            "row_summary": {
+                "count": 0,
+                "percentage": 0.0
+            },
+            "column_summary": {}
+        },
+        "data_types": {
+            "summary": {
+                "customer_id": "str",
+                "age": "float64",
+                "job": "str",
+                "marital_status": "str",
+                "education": "str",
+                "balance": "float64",
+                "has_credit_card": "bool",
+                "has_housing_loan": "bool",
+                "has_personal_loan": "bool",
+                "account_creation_date": "str",
+                "last_login": "str"
+            }
+        },
+        "outliers": {
+            "columns": {
+                "balance": {
+                    "count": 2,
+                    "percentage": 13.33,
+                    "lower_bound": -6798.33,
+                    "upper_bound": 11938.72
+                }
+            }
+        },
+        "recommendations": [
+            "Remove 0 duplicate row(s).",
+            "Investigate outliers in column(s): balance.",
+            "Dataset quality is Excellent. Suitable for analytics and AI workloads."
+        ],
+        "metadata": {
+            "engine": "QualityEngine",
+            "version": "8.2"
+        }
+    },
+    "profiling": {
+        "summary": {
+            "total_columns": 11,
+            "numeric_columns": 2,
+            "categorical_columns": 6,
+            "datetime_columns": 0,
+            "boolean_columns": 0,
+            "text_columns": 0
+        },
+        "numeric_profiles": [
+            {
+                "column_name": "age",
+                "dtype": "float64",
+                "count": 14,
+                "missing_count": 1,
+                "missing_percentage": 6.67,
+                "mean": 40.0,
+                "median": 38.5,
+                "mode": 24.0,
+                "minimum": 24.0,
+                "maximum": 60.0,
+                "value_range": 36.0,
+                "variance": 125.6923076923077,
+                "standard_deviation": 11.211258078035119,
+                "skewness": 0.4635028818556375,
+                "kurtosis": -0.7690585027005552,
+                "q1": 31.25,
+                "q2": 38.5,
+                "q3": 47.25,
+                "interquartile_range": 16.0
+            },
+            {
+                "column_name": "balance",
+                "dtype": "float64",
+                "count": 14,
+                "missing_count": 1,
+                "missing_percentage": 6.67,
+                "mean": 4360.971428571428,
+                "median": 975.05,
+                "mode": -250.0,
+                "minimum": -250.0,
+                "maximum": 24050.0,
+                "value_range": 24300.0,
+                "variance": 45818842.41950549,
+                "standard_deviation": 6768.961694344672,
+                "skewness": 2.2187625623383616,
+                "kurtosis": 5.270072380373116,
+                "q1": 228.0625,
+                "q2": 975.05,
+                "q3": 4912.325,
+                "interquartile_range": 4684.2625
+            }
+        ],
+        "categorical_profiles": [
+            {
+                "column_name": "customer_id",
+                "dtype": "str",
+                "count": 15,
+                "missing_count": 0,
+                "missing_percentage": 0.0,
+                "empty_string_count": 0,
+                "whitespace_count": 0,
+                "unique_values": 15,
+                "distinct_percentage": 100.0,
+                "most_frequent_value": "CUST001",
+                "most_frequent_count": 1,
+                "most_frequent_percentage": 6.67,
+                "least_frequent_value": "CUST015",
+                "least_frequent_count": 1,
+                "average_length": 7.0,
+                "minimum_length": 7,
+                "maximum_length": 7
+            },
+            {
+                "column_name": "job",
+                "dtype": "str",
+                "count": 15,
+                "missing_count": 0,
+                "missing_percentage": 0.0,
+                "empty_string_count": 0,
+                "whitespace_count": 0,
+                "unique_values": 8,
+                "distinct_percentage": 53.33,
+                "most_frequent_value": "management",
+                "most_frequent_count": 3,
+                "most_frequent_percentage": 20.0,
+                "least_frequent_value": "services",
+                "least_frequent_count": 1,
+                "average_length": 9.0,
+                "minimum_length": 6,
+                "maximum_length": 12
+            },
+            {
+                "column_name": "marital_status",
+                "dtype": "str",
+                "count": 15,
+                "missing_count": 0,
+                "missing_percentage": 0.0,
+                "empty_string_count": 0,
+                "whitespace_count": 0,
+                "unique_values": 3,
+                "distinct_percentage": 20.0,
+                "most_frequent_value": "married",
+                "most_frequent_count": 8,
+                "most_frequent_percentage": 53.33,
+                "least_frequent_value": "divorced",
+                "least_frequent_count": 2,
+                "average_length": 6.8,
+                "minimum_length": 6,
+                "maximum_length": 8
+            },
+            {
+                "column_name": "education",
+                "dtype": "str",
+                "count": 15,
+                "missing_count": 0,
+                "missing_percentage": 0.0,
+                "empty_string_count": 0,
+                "whitespace_count": 0,
+                "unique_values": 3,
+                "distinct_percentage": 20.0,
+                "most_frequent_value": "secondary",
+                "most_frequent_count": 7,
+                "most_frequent_percentage": 46.67,
+                "least_frequent_value": "primary",
+                "least_frequent_count": 2,
+                "average_length": 8.33,
+                "minimum_length": 7,
+                "maximum_length": 9
+            },
+            {
+                "column_name": "account_creation_date",
+                "dtype": "str",
+                "count": 15,
+                "missing_count": 0,
+                "missing_percentage": 0.0,
+                "empty_string_count": 0,
+                "whitespace_count": 0,
+                "unique_values": 15,
+                "distinct_percentage": 100.0,
+                "most_frequent_value": "2021-05-12",
+                "most_frequent_count": 1,
+                "most_frequent_percentage": 6.67,
+                "least_frequent_value": "2023-11-12",
+                "least_frequent_count": 1,
+                "average_length": 10.0,
+                "minimum_length": 10,
+                "maximum_length": 10
+            },
+            {
+                "column_name": "last_login",
+                "dtype": "str",
+                "count": 13,
+                "missing_count": 2,
+                "missing_percentage": 13.33,
+                "empty_string_count": 0,
+                "whitespace_count": 0,
+                "unique_values": 13,
+                "distinct_percentage": 100.0,
+                "most_frequent_value": "2026-07-20 08:15:00",
+                "most_frequent_count": 1,
+                "most_frequent_percentage": 7.69,
+                "least_frequent_value": "2026-07-24 15:45:30",
+                "least_frequent_count": 1,
+                "average_length": 19.0,
+                "minimum_length": 19,
+                "maximum_length": 19
+            }
+        ],
+        "datetime_profiles": [],
+        "high_cardinality_columns": [],
+        "memory": {
+            "total_memory": "1.96 KB",
+            "average_column_memory": "0.16 KB"
+        },
+        "metadata": {
+            "engine": "ProfilingEngine",
+            "version": "8.2"
+        }
+    },
+    "correlation": {
+        "summary": {
+            "method": "pearson",
+            "threshold": 0.8,
+            "total_numeric_columns": 2,
+            "total_pairs": 0,
+            "strong_positive_count": 0,
+            "strong_negative_count": 0
+        },
+        "matrix": {
+            "age": {
+                "age": 1.0,
+                "balance": 0.776
+            },
+            "balance": {
+                "age": 0.776,
+                "balance": 1.0
+            }
+        },
+        "strong_positive": [],
+        "strong_negative": [],
+        "highly_correlated_pairs": [],
+        "visualization": {
+            "heatmap_path": null
+        },
+        "recommendations": [
+            "No strong correlations were detected."
+        ],
+        "metadata": {
+            "engine": "CorrelationEngine",
+            "version": "8.2"
+        }
+    },
+    "visualization": {
+        "summary": {
+            "total_charts": 7,
+            "total_categories": 4
+        },
+        "categories": [
+            {
+                "title": "Data Quality",
+                "charts": [
+                    {
+                        "title": "Missing Values",
+                        "chart_type": "bar",
+                        "x": "column",
+                        "y": "missing_count",
+                        "description": null,
+                        "image_path": null,
+                        "interactive_path": null,
+                        "data": {
+                            "column": [
+                                "age",
+                                "balance",
+                                "last_login"
+                            ],
+                            "missing_count": [
+                                1,
+                                1,
+                                2
+                            ]
+                        }
+                    }
+                ]
+            },
+            {
+                "title": "Dataset Overview",
+                "charts": [
+                    {
+                        "title": "Data Types",
+                        "chart_type": "pie",
+                        "x": null,
+                        "y": null,
+                        "description": null,
+                        "image_path": null,
+                        "interactive_path": null,
+                        "data": {
+                            "Numeric": 2,
+                            "Categorical": 6,
+                            "Datetime": 0
+                        }
+                    }
+                ]
+            },
+            {
+                "title": "Numeric Analysis",
+                "charts": [
+                    {
+                        "title": "age Histogram",
+                        "chart_type": "histogram",
+                        "x": "age",
+                        "y": null,
+                        "description": null,
+                        "image_path": null,
+                        "interactive_path": null,
+                        "data": [
+                            45.0,
+                            32.0,
+                            58.0,
+                            28.0,
+                            39.0,
+                            42.0,
+                            35.0,
+                            51.0,
+                            24.0,
+                            48.0,
+                            31.0,
+                            60.0,
+                            38.0,
+                            29.0
+                        ]
+                    },
+                    {
+                        "title": "balance Histogram",
+                        "chart_type": "histogram",
+                        "x": "balance",
+                        "y": null,
+                        "description": null,
+                        "image_path": null,
+                        "interactive_path": null,
+                        "data": [
+                            5042.5,
+                            120.0,
+                            12050.75,
+                            450.25,
+                            3200.0,
+                            850.1,
+                            -250.0,
+                            8900.5,
+                            154.0,
+                            4521.8,
+                            23.5,
+                            24050.0,
+                            840.2,
+                            1100.0
+                        ]
+                    },
+                    {
+                        "title": "age Box Plot",
+                        "chart_type": "boxplot",
+                        "x": null,
+                        "y": "age",
+                        "description": null,
+                        "image_path": null,
+                        "interactive_path": null,
+                        "data": [
+                            45.0,
+                            32.0,
+                            58.0,
+                            28.0,
+                            39.0,
+                            42.0,
+                            35.0,
+                            51.0,
+                            24.0,
+                            48.0,
+                            31.0,
+                            60.0,
+                            38.0,
+                            29.0
+                        ]
+                    },
+                    {
+                        "title": "balance Box Plot",
+                        "chart_type": "boxplot",
+                        "x": null,
+                        "y": "balance",
+                        "description": null,
+                        "image_path": null,
+                        "interactive_path": null,
+                        "data": [
+                            5042.5,
+                            120.0,
+                            12050.75,
+                            450.25,
+                            3200.0,
+                            850.1,
+                            -250.0,
+                            8900.5,
+                            154.0,
+                            4521.8,
+                            23.5,
+                            24050.0,
+                            840.2,
+                            1100.0
+                        ]
+                    }
+                ]
+            },
+            {
+                "title": "Correlation",
+                "charts": [
+                    {
+                        "title": "Correlation Heatmap",
+                        "chart_type": "heatmap",
+                        "x": null,
+                        "y": null,
+                        "description": null,
+                        "image_path": null,
+                        "interactive_path": null,
+                        "data": {
+                            "age": {
+                                "age": 1.0,
+                                "balance": 0.776
+                            },
+                            "balance": {
+                                "age": 0.776,
+                                "balance": 1.0
+                            }
+                        }
+                    }
+                ]
+            }
+        ],
+        "metadata": {
+            "engine": "VisualizationEngine",
+            "version": "8.2"
+        }
+    },
+    "rules": {
+        "total_rules": 2,
+        "passed_rules": 2,
+        "failed_rules": 0,
+        "warning_rules": 0,
+        "overall_status": "PASS",
+        "results": [
+            {
+                "rule_name": "Minimum Row Count",
+                "passed": true,
+                "severity": "warning",
+                "message": "Dataset contains 15 rows.",
+                "affected_rows": [],
+                "affected_columns": [],
+                "expected": ">= 10",
+                "actual": "15",
+                "recommendation": null
+            },
+            {
+                "rule_name": "Duplicate Rows",
+                "passed": true,
+                "severity": "warning",
+                "message": "0 duplicate row(s) detected.",
+                "affected_rows": [],
+                "affected_columns": [],
+                "expected": "<= 0",
+                "actual": "0",
+                "recommendation": null
+            }
+        ],
+        "metadata": {
+            "engine": "RuleEngine",
+            "version": "8.2"
+        }
+    },
+    "insights": {
+        "summary": {
+            "total_insights": 7,
+            "critical": 0,
+            "warning": 1,
+            "informational": 6
+        },
+        "insights": [
+            {
+                "id": "quality_overview",
+                "title": "Dataset Quality Overview",
+                "category": "Quality",
+                "severity": "Info",
+                "confidence": 1.0,
+                "description": "The dataset achieved an overall quality score of 97.70 with grade 'Excellent'.",
+                "business_impact": "Higher quality datasets generally produce more reliable analytics and machine learning models.",
+                "recommendation": "Review the Quality Report and resolve critical data quality issues before downstream analysis.",
+                "affected_columns": [],
+                "source_engine": "QualityEngine",
+                "metadata": {
+                    "score": 97.7,
+                    "grade": "Excellent",
+                    "rows": 15,
+                    "columns": 11
+                }
+            },
+            {
+                "id": "missing_age",
+                "title": "Missing Values in 'age'",
+                "category": "Missing Values",
+                "severity": "Info",
+                "confidence": 1.0,
+                "description": "Column 'age' contains 1 missing values (6.67% of the dataset).",
+                "business_impact": "Missing values may reduce model accuracy, bias statistical analysis, and affect data quality.",
+                "recommendation": "Consider imputing missing values, removing affected rows, or investigating the source of missing data.",
+                "affected_columns": [
+                    "age"
+                ],
+                "source_engine": "QualityEngine",
+                "metadata": {
+                    "missing_count": 1,
+                    "missing_percentage": 6.67
+                }
+            },
+            {
+                "id": "missing_balance",
+                "title": "Missing Values in 'balance'",
+                "category": "Missing Values",
+                "severity": "Info",
+                "confidence": 1.0,
+                "description": "Column 'balance' contains 1 missing values (6.67% of the dataset).",
+                "business_impact": "Missing values may reduce model accuracy, bias statistical analysis, and affect data quality.",
+                "recommendation": "Consider imputing missing values, removing affected rows, or investigating the source of missing data.",
+                "affected_columns": [
+                    "balance"
+                ],
+                "source_engine": "QualityEngine",
+                "metadata": {
+                    "missing_count": 1,
+                    "missing_percentage": 6.67
+                }
+            },
+            {
+                "id": "missing_last_login",
+                "title": "Missing Values in 'last_login'",
+                "category": "Missing Values",
+                "severity": "Warning",
+                "confidence": 1.0,
+                "description": "Column 'last_login' contains 2 missing values (13.33% of the dataset).",
+                "business_impact": "Missing values may reduce model accuracy, bias statistical analysis, and affect data quality.",
+                "recommendation": "Consider imputing missing values, removing affected rows, or investigating the source of missing data.",
+                "affected_columns": [
+                    "last_login"
+                ],
+                "source_engine": "QualityEngine",
+                "metadata": {
+                    "missing_count": 2,
+                    "missing_percentage": 13.33
+                }
+            },
+            {
+                "id": "profile_age",
+                "title": "Numeric Profile: age",
+                "category": "Profiling",
+                "severity": "Info",
+                "confidence": 1.0,
+                "description": "Column 'age' has mean=40.0000, median=38.5000, standard deviation=11.2113.",
+                "business_impact": "Understanding feature distributions helps identify skewness, anomalies, and potential feature engineering opportunities.",
+                "recommendation": "Review this column for skewness, outliers, or normalization before model training.",
+                "affected_columns": [
+                    "age"
+                ],
+                "source_engine": "ProfilingEngine",
+                "metadata": {
+                    "mean": 40.0,
+                    "median": 38.5,
+                    "std_dev": 11.211258078035119,
+                    "minimum": 24.0,
+                    "maximum": 60.0
+                }
+            },
+            {
+                "id": "profile_balance",
+                "title": "Numeric Profile: balance",
+                "category": "Profiling",
+                "severity": "Info",
+                "confidence": 1.0,
+                "description": "Column 'balance' has mean=4360.9714, median=975.0500, standard deviation=6768.9617.",
+                "business_impact": "Understanding feature distributions helps identify skewness, anomalies, and potential feature engineering opportunities.",
+                "recommendation": "Review this column for skewness, outliers, or normalization before model training.",
+                "affected_columns": [
+                    "balance"
+                ],
+                "source_engine": "ProfilingEngine",
+                "metadata": {
+                    "mean": 4360.971428571428,
+                    "median": 975.05,
+                    "std_dev": 6768.961694344672,
+                    "minimum": -250.0,
+                    "maximum": 24050.0
+                }
+            },
+            {
+                "id": "visualization_summary",
+                "title": "Visualization Summary",
+                "category": "Visualization",
+                "severity": "Info",
+                "confidence": 1.0,
+                "description": "7 chart specifications have been generated for exploratory data analysis.",
+                "business_impact": "Visual exploration helps identify trends, relationships, anomalies, and potential data quality issues.",
+                "recommendation": "Review the generated visualizations before performing detailed statistical analysis or machine learning.",
+                "affected_columns": [],
+                "source_engine": "VisualizationEngine",
+                "metadata": {
+                    "chart_count": 7,
+                    "category_count": 4
+                }
+            }
+        ],
+        "metadata": {
+            "engine": "InsightEngine",
+            "version": "8.2"
+        }
+    },
+    "recommendations": {
+        "summary": {
+            "total_actions": 10,
+            "high_priority": 0,
+            "medium_priority": 4,
+            "low_priority": 6
+        },
+        "recommendations": [
+            {
+                "id": "QUALITY-1",
+                "title": "Data Quality Improvement",
+                "description": "Remove 0 duplicate row(s).",
+                "category": "Quality",
+                "priority": "Medium",
+                "impact": "Medium",
+                "effort": "Low",
+                "source_engine": "QualityEngine",
+                "affected_columns": [],
+                "implementation_steps": [],
+                "metadata": {}
+            },
+            {
+                "id": "QUALITY-2",
+                "title": "Data Quality Improvement",
+                "description": "Investigate outliers in column(s): balance.",
+                "category": "Quality",
+                "priority": "Medium",
+                "impact": "Medium",
+                "effort": "Low",
+                "source_engine": "QualityEngine",
+                "affected_columns": [],
+                "implementation_steps": [],
+                "metadata": {}
+            },
+            {
+                "id": "QUALITY-3",
+                "title": "Data Quality Improvement",
+                "description": "Dataset quality is Excellent. Suitable for analytics and AI workloads.",
+                "category": "Quality",
+                "priority": "Medium",
+                "impact": "Medium",
+                "effort": "Low",
+                "source_engine": "QualityEngine",
+                "affected_columns": [],
+                "implementation_steps": [],
+                "metadata": {}
+            },
+            {
+                "id": "INSIGHT-1",
+                "title": "Dataset Quality Overview",
+                "description": "Review the Quality Report and resolve critical data quality issues before downstream analysis.",
+                "category": "Quality",
+                "priority": "Low",
+                "impact": "High",
+                "effort": "Medium",
+                "source_engine": "QualityEngine",
+                "affected_columns": [],
+                "implementation_steps": [
+                    "Review the affected data.",
+                    "Apply the recommended corrective action.",
+                    "Re-run the analysis."
+                ],
+                "metadata": {}
+            },
+            {
+                "id": "INSIGHT-2",
+                "title": "Missing Values in 'age'",
+                "description": "Consider imputing missing values, removing affected rows, or investigating the source of missing data.",
+                "category": "Missing Values",
+                "priority": "Low",
+                "impact": "High",
+                "effort": "Medium",
+                "source_engine": "QualityEngine",
+                "affected_columns": [
+                    "age"
+                ],
+                "implementation_steps": [
+                    "Review the affected data.",
+                    "Apply the recommended corrective action.",
+                    "Re-run the analysis."
+                ],
+                "metadata": {}
+            },
+            {
+                "id": "INSIGHT-3",
+                "title": "Missing Values in 'balance'",
+                "description": "Consider imputing missing values, removing affected rows, or investigating the source of missing data.",
+                "category": "Missing Values",
+                "priority": "Low",
+                "impact": "High",
+                "effort": "Medium",
+                "source_engine": "QualityEngine",
+                "affected_columns": [
+                    "balance"
+                ],
+                "implementation_steps": [
+                    "Review the affected data.",
+                    "Apply the recommended corrective action.",
+                    "Re-run the analysis."
+                ],
+                "metadata": {}
+            },
+            {
+                "id": "INSIGHT-4",
+                "title": "Missing Values in 'last_login'",
+                "description": "Consider imputing missing values, removing affected rows, or investigating the source of missing data.",
+                "category": "Missing Values",
+                "priority": "Medium",
+                "impact": "High",
+                "effort": "Medium",
+                "source_engine": "QualityEngine",
+                "affected_columns": [
+                    "last_login"
+                ],
+                "implementation_steps": [
+                    "Review the affected data.",
+                    "Apply the recommended corrective action.",
+                    "Re-run the analysis."
+                ],
+                "metadata": {}
+            },
+            {
+                "id": "INSIGHT-5",
+                "title": "Numeric Profile: age",
+                "description": "Review this column for skewness, outliers, or normalization before model training.",
+                "category": "Profiling",
+                "priority": "Low",
+                "impact": "High",
+                "effort": "Medium",
+                "source_engine": "ProfilingEngine",
+                "affected_columns": [
+                    "age"
+                ],
+                "implementation_steps": [
+                    "Review the affected data.",
+                    "Apply the recommended corrective action.",
+                    "Re-run the analysis."
+                ],
+                "metadata": {}
+            },
+            {
+                "id": "INSIGHT-6",
+                "title": "Numeric Profile: balance",
+                "description": "Review this column for skewness, outliers, or normalization before model training.",
+                "category": "Profiling",
+                "priority": "Low",
+                "impact": "High",
+                "effort": "Medium",
+                "source_engine": "ProfilingEngine",
+                "affected_columns": [
+                    "balance"
+                ],
+                "implementation_steps": [
+                    "Review the affected data.",
+                    "Apply the recommended corrective action.",
+                    "Re-run the analysis."
+                ],
+                "metadata": {}
+            },
+            {
+                "id": "INSIGHT-7",
+                "title": "Visualization Summary",
+                "description": "Review the generated visualizations before performing detailed statistical analysis or machine learning.",
+                "category": "Visualization",
+                "priority": "Low",
+                "impact": "High",
+                "effort": "Medium",
+                "source_engine": "VisualizationEngine",
+                "affected_columns": [],
+                "implementation_steps": [
+                    "Review the affected data.",
+                    "Apply the recommended corrective action.",
+                    "Re-run the analysis."
+                ],
+                "metadata": {}
+            }
+        ],
+        "metadata": {
+            "engine": "RecommendationService",
+            "version": "8.3",
+            "sources": [
+                "QualityEngine",
+                "RuleEngine",
+                "InsightEngine"
+            ]
+        }
+    }
+}
