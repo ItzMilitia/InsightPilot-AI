@@ -24,3 +24,52 @@ class RuleResult:
     actual: Optional[str] = None
 
     recommendation: Optional[str] = None
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict,
+    ) -> "RuleResult":
+        """
+        Deserialize RuleResult.
+        """
+
+        return cls(
+            rule_name=data.get(
+                "rule_name",
+                "",
+            ),
+            passed=data.get(
+                "passed",
+                False,
+            ),
+            severity=data.get(
+                "severity",
+                "",
+            ),
+            message=data.get(
+                "message",
+                "",
+            ),
+            affected_rows=list(
+                data.get(
+                    "affected_rows",
+                    [],
+                )
+            ),
+            affected_columns=list(
+                data.get(
+                    "affected_columns",
+                    [],
+                )
+            ),
+            expected=data.get(
+                "expected",
+            ),
+            actual=data.get(
+                "actual",
+            ),
+            recommendation=data.get(
+                "recommendation",
+            ),
+        )

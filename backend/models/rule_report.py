@@ -42,3 +42,48 @@ class RuleReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "RuleReport":
+        """
+        Deserialize RuleReport.
+        """
+
+        return cls(
+            total_rules=data.get(
+                "total_rules",
+                0,
+            ),
+            passed_rules=data.get(
+                "passed_rules",
+                0,
+            ),
+            failed_rules=data.get(
+                "failed_rules",
+                0,
+            ),
+            warning_rules=data.get(
+                "warning_rules",
+                0,
+            ),
+            overall_status=data.get(
+                "overall_status",
+                "PASS",
+            ),
+            results=[
+                RuleResult.from_dict(result)
+                for result in data.get(
+                    "results",
+                    [],
+                )
+            ],
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

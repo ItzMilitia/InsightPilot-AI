@@ -30,6 +30,14 @@ class CorrelationPair:
 
     coefficient: float
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "CorrelationPair":
+
+        return cls(**data)
+
 
 # ==========================================================
 # Correlation Summary
@@ -53,6 +61,14 @@ class CorrelationSummary:
 
     strong_negative_count: int = 0
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "CorrelationSummary":
+
+        return cls(**data)
+
 
 # ==========================================================
 # Correlation Visualization
@@ -65,6 +81,14 @@ class CorrelationVisualization:
     """
 
     heatmap_path: str | None = None
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "CorrelationVisualization":
+
+        return cls(**data)
 
 
 # ==========================================================
@@ -115,3 +139,63 @@ class CorrelationReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "CorrelationReport":
+
+        return cls(
+            summary=CorrelationSummary.from_dict(
+                data.get(
+                    "summary",
+                    {},
+                )
+            ),
+            matrix=dict(
+                data.get(
+                    "matrix",
+                    {},
+                )
+            ),
+            strong_positive=[
+                CorrelationPair.from_dict(item)
+                for item in data.get(
+                    "strong_positive",
+                    [],
+                )
+            ],
+            strong_negative=[
+                CorrelationPair.from_dict(item)
+                for item in data.get(
+                    "strong_negative",
+                    [],
+                )
+            ],
+            highly_correlated_pairs=[
+                CorrelationPair.from_dict(item)
+                for item in data.get(
+                    "highly_correlated_pairs",
+                    [],
+                )
+            ],
+            visualization=CorrelationVisualization.from_dict(
+                data.get(
+                    "visualization",
+                    {},
+                )
+            ),
+            recommendations=list(
+                data.get(
+                    "recommendations",
+                    [],
+                )
+            ),
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

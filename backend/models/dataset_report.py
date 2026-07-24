@@ -37,6 +37,14 @@ class DatasetFileInfo:
 
     checksum: str | None = None
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "DatasetFileInfo":
+
+        return cls(**data)
+
 
 # ==========================================================
 # Dataset Structure
@@ -53,6 +61,14 @@ class DatasetStructure:
     total_columns: int = 0
 
     total_cells: int = 0
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "DatasetStructure":
+
+        return cls(**data)
 
 
 # ==========================================================
@@ -77,6 +93,14 @@ class ColumnTypeSummary:
 
     other: int = 0
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "ColumnTypeSummary":
+
+        return cls(**data)
+
 
 # ==========================================================
 # Dataset Preview
@@ -93,6 +117,25 @@ class DatasetPreview:
     )
 
     max_rows: int = 5
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "DatasetPreview":
+
+        return cls(
+            rows=list(
+                data.get(
+                    "rows",
+                    [],
+                )
+            ),
+            max_rows=data.get(
+                "max_rows",
+                5,
+            ),
+        )
 
 
 # ==========================================================
@@ -134,3 +177,45 @@ class DatasetReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "DatasetReport":
+        """
+        Deserialize DatasetReport.
+        """
+
+        return cls(
+            file=DatasetFileInfo.from_dict(
+                data.get(
+                    "file",
+                    {},
+                )
+            ),
+            structure=DatasetStructure.from_dict(
+                data.get(
+                    "structure",
+                    {},
+                )
+            ),
+            column_types=ColumnTypeSummary.from_dict(
+                data.get(
+                    "column_types",
+                    {},
+                )
+            ),
+            preview=DatasetPreview.from_dict(
+                data.get(
+                    "preview",
+                    {},
+                )
+            ),
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

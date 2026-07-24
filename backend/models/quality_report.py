@@ -30,6 +30,14 @@ class QualitySummary:
 
     total_columns: int = 0
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "QualitySummary":
+
+        return cls(**data)
+
 
 # ==========================================================
 # Missing Values
@@ -46,6 +54,25 @@ class MissingValueReport:
     columns: dict[str, dict[str, float | int]] = field(
         default_factory=dict
     )
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "MissingValueReport":
+
+        return cls(
+            total_missing=data.get(
+                "total_missing",
+                0,
+            ),
+            columns=dict(
+                data.get(
+                    "columns",
+                    {},
+                )
+            ),
+        )
 
 
 # ==========================================================
@@ -70,6 +97,35 @@ class DuplicateReport:
         default_factory=dict
     )
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "DuplicateReport":
+
+        return cls(
+            duplicate_rows=data.get(
+                "duplicate_rows",
+                0,
+            ),
+            duplicate_columns=data.get(
+                "duplicate_columns",
+                0,
+            ),
+            row_summary=dict(
+                data.get(
+                    "row_summary",
+                    {},
+                )
+            ),
+            column_summary=dict(
+                data.get(
+                    "column_summary",
+                    {},
+                )
+            ),
+        )
+
 
 # ==========================================================
 # Data Types
@@ -85,6 +141,21 @@ class DataTypeReport:
         default_factory=dict
     )
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "DataTypeReport":
+
+        return cls(
+            summary=dict(
+                data.get(
+                    "summary",
+                    {},
+                )
+            ),
+        )
+
 
 # ==========================================================
 # Outlier Information
@@ -99,6 +170,21 @@ class OutlierReport:
     columns: dict[str, dict[str, float | int]] = field(
         default_factory=dict
     )
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "OutlierReport":
+
+        return cls(
+            columns=dict(
+                data.get(
+                    "columns",
+                    {},
+                )
+            ),
+        )
 
 
 # ==========================================================
@@ -145,3 +231,54 @@ class QualityReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "QualityReport":
+
+        return cls(
+            summary=QualitySummary.from_dict(
+                data.get(
+                    "summary",
+                    {},
+                )
+            ),
+            missing=MissingValueReport.from_dict(
+                data.get(
+                    "missing",
+                    {},
+                )
+            ),
+            duplicates=DuplicateReport.from_dict(
+                data.get(
+                    "duplicates",
+                    {},
+                )
+            ),
+            data_types=DataTypeReport.from_dict(
+                data.get(
+                    "data_types",
+                    {},
+                )
+            ),
+            outliers=OutlierReport.from_dict(
+                data.get(
+                    "outliers",
+                    {},
+                )
+            ),
+            recommendations=list(
+                data.get(
+                    "recommendations",
+                    [],
+                )
+            ),
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

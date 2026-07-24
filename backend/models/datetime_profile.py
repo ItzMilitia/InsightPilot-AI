@@ -26,3 +26,14 @@ class DatetimeProfile:
 
     most_frequent_date: str | None = None
     most_frequent_count: int = 0
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict,
+    ) -> "DatetimeProfile":
+        """
+        Deserialize DatetimeProfile.
+        """
+
+        return cls(**data)

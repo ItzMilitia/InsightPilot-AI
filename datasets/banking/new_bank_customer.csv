@@ -1,0 +1,16 @@
+customer_id,age,job,marital_status,education,balance,has_credit_card,has_housing_loan,has_personal_loan,account_creation_date,last_login
+CUST001,45,management,married,tertiary,5042.50,True,False,False,2021-05-12,2026-07-20 08:15:00
+CUST002,32,technician,single,secondary,120.00,True,True,False,2022-11-03,2026-07-22 14:30:22
+CUST003,58,retired,married,primary,12050.75,False,False,False,2018-02-19,2026-07-24 09:10:05
+CUST004,28,student,single,secondary,450.25,True,False,False,2024-08-30,2026-07-24 10:45:12
+CUST005,39,admin.,divorced,secondary,3200.00,True,True,True,2020-01-15,2026-07-21 16:20:00
+CUST006,42,blue-collar,married,secondary,850.10,False,True,False,2019-07-22,
+CUST007,35,entrepreneur,married,tertiary,-250.00,True,False,True,2023-03-11,2026-07-23 11:11:11
+CUST008,51,management,married,tertiary,8900.50,True,False,False,2015-09-05,2026-07-24 12:00:00
+CUST009,24,technician,single,tertiary,,False,True,False,2025-01-10,2026-07-24 18:30:00
+CUST010,48,services,married,secondary,154.00,True,True,False,2021-12-01,2026-07-23 09:45:00
+CUST011,31,management,single,tertiary,4521.80,True,False,False,2022-06-18,2026-07-24 07:15:22
+CUST012,,blue-collar,married,primary,23.50,False,True,False,2017-04-14,2026-07-15 14:20:00
+CUST013,60,retired,married,secondary,24050.00,False,False,False,2012-10-30,2026-07-20 10:05:00
+CUST014,38,technician,divorced,secondary,840.20,True,True,True,2020-08-25,
+CUST015,29,admin.,single,tertiary,1100.00,True,False,False,2023-11-12,2026-07-24 15:45:30

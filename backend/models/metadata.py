@@ -75,3 +75,67 @@ class ReportMetadata:
         data["report_type"] = self.report_type.value
 
         return data
+    
+    @classmethod
+    def from_dict(
+            cls,
+            data: dict[str, Any],
+        ) -> "ReportMetadata":
+            """
+            Deserialize ReportMetadata from a dictionary.
+            """
+
+            return cls(
+                report_id=data.get(
+                    "report_id",
+                    str(uuid4()),
+                ),
+                title=data.get(
+                    "title",
+                    "InsightPilot AI Report",
+                ),
+                version=data.get(
+                    "version",
+                    "0.9.0",
+                ),
+                generated_at=datetime.fromisoformat(
+                    data["generated_at"]
+                )
+                if data.get("generated_at")
+                else datetime.now(UTC),
+                generated_by=data.get(
+                    "generated_by",
+                    "InsightPilot AI",
+                ),
+                report_type=ReportType(
+                    data.get(
+                        "report_type",
+                        ReportType.HTML.value,
+                    )
+                ),
+                status=data.get(
+                    "status",
+                    "Completed",
+                ),
+                author=data.get(
+                    "author",
+                ),
+                dataset_name=data.get(
+                    "dataset_name",
+                ),
+                execution_time=data.get(
+                    "execution_time",
+                ),
+                tags=list(
+                    data.get(
+                        "tags",
+                        [],
+                    )
+                ),
+                metadata=dict(
+                    data.get(
+                        "metadata",
+                        {},
+                    )
+                ),
+            )

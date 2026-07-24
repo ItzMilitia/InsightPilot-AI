@@ -25,9 +25,11 @@ Version:
 
 from __future__ import annotations
 
+from backend.engines.report_comparison_engine import ReportComparisonEngine
 from backend.services.report_history_service import (
     ReportHistoryService,
 )
+from backend.services.report_registry import ReportRegistry
 from backend.services.report_version_service import (
     ReportVersionService,
 )
@@ -35,6 +37,9 @@ from backend.models.report_package import ReportPackage
 from datetime import datetime
 from operator import attrgetter
 import math
+from backend.models.loaded_report import LoadedReport
+from backend.services.report_loader_service import ReportLoaderService
+from backend.models.report_comparison import ReportComparison
 
 class ReportExplorerService:
     """
@@ -48,9 +53,12 @@ class ReportExplorerService:
 
     def __init__(
         self,
-        history_service: ReportHistoryService | None = None,
-        version_service: ReportVersionService | None = None,
-    ) -> None:
+        registry: ReportRegistry,
+        history_service: ReportHistoryService,
+        version_service: ReportVersionService,
+        loader_service: ReportLoaderService,
+        comparison_engine: ReportComparisonEngine,
+    ):
         """
         Initialize the Report Explorer Service.
 
@@ -63,19 +71,13 @@ class ReportExplorerService:
             Optional ReportVersionService instance.
         """
 
-        self._history_service = (
-            history_service
-            if history_service is not None
-            else ReportHistoryService()
-        )
+        self._history_service = history_service
 
-        self._version_service = (
-            version_service
-            if version_service is not None
-            else ReportVersionService(
-                history_service=self._history_service,
-            )
-        )
+        self._version_service = version_service
+
+        self._loader = loader_service
+
+        self._comparison_engine = comparison_engine
 
     # ======================================================
     # Properties
@@ -547,5 +549,91 @@ class ReportExplorerService:
             "versions": versions,
         }
     
+    def compare_reports(
+        self,
+        baseline,
+        comparison,
+    ):
+        """
+        Compare two report contexts.
+
+        Parameters
+        ----------
+        baseline:
+            Baseline ReportContext.
+
+        comparison:
+            Comparison ReportContext.
+
+        Returns
+        -------
+        ReportComparison
+            Comparison produced by the ReportComparisonEngine.
+        """
+
+        from backend.engines.report_comparison_engine import (
+            ReportComparisonEngine,
+        )
+
+        engine = ReportComparisonEngine()
+
+        return engine.analyze(
+            baseline=baseline,
+            comparison=comparison,
+        )
     
+    def load_report(
+        self,
+        report_id: str,
+    ) -> LoadedReport:
+        """
+        Load a persisted report.
+
+        Parameters
+        ----------
+        report_id:
+            Identifier of the report.
+
+        Returns
+        -------
+        LoadedReport
+            Fully reconstructed report.
+        """
+
+        return self._loader.load(
+            report_id
+        )
     
+    def compare_reports(
+        self,
+        baseline_report_id: str,
+        comparison_report_id: str,
+    ) -> ReportComparison:
+        """
+        Compare two persisted reports.
+
+        Parameters
+        ----------
+        baseline_report_id:
+            Baseline report identifier.
+
+        comparison_report_id:
+            Comparison report identifier.
+
+        Returns
+        -------
+        ReportComparison
+        """
+
+        baseline = self.load_report(
+            baseline_report_id
+        )
+
+        comparison = self.load_report(
+            comparison_report_id
+        )
+
+        return self._comparison_engine.analyze(
+            baseline=baseline.context,
+            comparison=comparison.context,
+        )

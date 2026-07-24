@@ -459,14 +459,14 @@ if SessionManager.has_dataset():
 
             st.info(
                 f"""
-Report **{metadata.title}** was generated successfully.
+            Report **{metadata.title}** was generated successfully.
 
-Dataset: **{metadata.dataset_name}**
+            Dataset: **{metadata.dataset_name}**
 
-Version: **{metadata.version}**
+            Version: **{metadata.version}**
 
-Generated Formats: **{", ".join(formats) if formats else "None"}**
-"""
+            Generated Formats: **{", ".join(formats) if formats else "None"}**
+            """ 
             )
 
         except Exception as exc:
@@ -480,6 +480,7 @@ Generated Formats: **{", ".join(formats) if formats else "None"}**
     st.divider()
 
     st.subheader("📚 Report Explorer")
+    st.subheader("🔍 Compare Reports")
 
     st.caption(
         "Showing the 5 most recently generated reports."
@@ -598,6 +599,19 @@ Generated Formats: **{", ".join(formats) if formats else "None"}**
                 )
             )
 
+            loaded_report = explorer.load_report(
+                selected_report.metadata.report_id
+            )
+
+            package = loaded_report.package
+
+            report_context = loaded_report.context
+
+            # ReportContext is available for:
+            # - Report Comparison
+            # - Insight Drill-down
+            # - Future Analytics
+
             st.divider()
 
             st.subheader("📄 Selected Report")
@@ -628,23 +642,145 @@ Generated Formats: **{", ".join(formats) if formats else "None"}**
                     str(selected_report.metadata.generated_at),
                 )
 
-            if getattr(selected_report, "formats", None):
+            formats = package.available_formats()
+
+            if formats:
 
                 st.divider()
 
                 st.subheader("📦 Available Formats")
 
-                for report_format in selected_report.formats:
+                for report_format in formats:
 
                     st.success(
                         report_format.upper()
                     )
+
+            baseline_report = st.selectbox(
+                "Baseline Report",
+                reports,
+                format_func=lambda report: (
+                    f"{report.metadata.dataset_name} | "
+                    f"{report.metadata.version} | "
+                    f"{report.metadata.report_id[:8]}"
+                ),
+                key="baseline_report",
+            )
+
+            comparison_report = st.selectbox(
+                "Comparison Report",
+                reports,
+                format_func=lambda report: (
+                    f"{report.metadata.dataset_name} | "
+                    f"{report.metadata.version} | "
+                    f"{report.metadata.report_id[:8]}"
+                ),
+                key="comparison_report",
+            )
+
+            if st.button("Compare Reports"):
+
+                comparison = explorer.compare_reports(
+                    baseline_report.metadata.report_id,
+                    comparison_report.metadata.report_id,
+                )
+
+                st.divider()
+
+                st.subheader("📊 Report Comparison")
+
+                # ------------------------------------------
+                # KPI Summary
+                # ------------------------------------------
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric(
+                        "Quality Score",
+                        f"{comparison.quality_score_after:.2f}",
+                        delta=f"{comparison.quality_score_delta:+.2f}",
+                    )
+
+                with col2:
+                    st.metric(
+                        "Missing Values",
+                        comparison.missing_value_delta,
+                    )
+
+                with col3:
+                    st.metric(
+                        "Duplicate Rows",
+                        comparison.duplicate_row_delta,
+                    )
+
+                # ------------------------------------------
+                # Executive Summary
+                # ------------------------------------------
+
+                st.divider()
+
+                st.subheader("Executive Summary")
+
+                st.info(
+                    comparison.summary.executive_summary
+                )
+
+                # ------------------------------------------
+                # Improvements
+                # ------------------------------------------
+
+                st.subheader("✅ Improvements")
+
+                if comparison.summary.improvements:
+
+                    for item in comparison.summary.improvements:
+                        st.success(item)
+
+                else:
+                    st.write("No improvements detected.")
+
+                # ------------------------------------------
+                # Regressions
+                # ------------------------------------------
+
+                st.subheader("⚠️ Regressions")
+
+                if comparison.summary.regressions:
+
+                    for item in comparison.summary.regressions:
+                        st.error(item)
+
+                else:
+                    st.write("No regressions detected.")
+
+                # ------------------------------------------
+                # Recommendations
+                # ------------------------------------------
+
+                st.subheader("💡 Recommendations")
+
+                if comparison.summary.recommendations:
+
+                    for item in comparison.summary.recommendations:
+                        st.info(item)
+
+                # ------------------------------------------
+                # Section Changes
+                # ------------------------------------------
+
+                st.divider()
+
+                st.subheader("📂 Section Changes")
+
+                st.json(comparison.section_changes)
 
         else:
 
             st.info(
                 "No reports have been generated yet."
             )
+
 
     except Exception as exc:
 

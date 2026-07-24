@@ -23,25 +23,17 @@ from typing import Any
 
 
 def calculate_delta(
-    before: int | float,
-    after: int | float,
-) -> float:
+    before: int | float | None,
+    after: int | float | None,
+) -> float | None:
     """
     Calculate the difference between two numeric values.
 
-    Parameters
-    ----------
-    before:
-        Baseline value.
-
-    after:
-        Comparison value.
-
-    Returns
-    -------
-    float
-        Difference (after - before).
+    Returns None when either value is unavailable.
     """
+
+    if before is None or after is None:
+        return None
 
     return float(after) - float(before)
 
@@ -140,25 +132,23 @@ def compare_dictionary(
 # ==========================================================
 
 
-def compare_lists(
-    before: list[str],
-    after: list[str],
-) -> dict[str, list[str]]:
-    """
-    Compare two unordered lists.
+def compare_lists(before, after, key=None):
+    if key is None:
+        def key(item):
+            if hasattr(item, "id"):
+                return item.id
+            return item
 
-    Returns
-    -------
-    dict
-        Added and removed elements.
-    """
+    before_map = {key(item): item for item in before}
+    after_map = {key(item): item for item in after}
 
-    before_set = set(before)
-    after_set = set(after)
+    before_keys = set(before_map)
+    after_keys = set(after_map)
 
     return {
-        "added": sorted(after_set - before_set),
-        "removed": sorted(before_set - after_set),
+        "added": [after_map[k] for k in after_keys - before_keys],
+        "removed": [before_map[k] for k in before_keys - after_keys],
+        "unchanged": [before_map[k] for k in before_keys & after_keys],
     }
 
 

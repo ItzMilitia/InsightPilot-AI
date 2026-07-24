@@ -40,6 +40,45 @@ class ChartSpec:
         default_factory=dict
     )
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "ChartSpec":
+        """
+        Deserialize ChartSpec.
+        """
+
+        return cls(
+            title=data.get(
+                "title",
+                "",
+            ),
+            chart_type=data.get(
+                "chart_type",
+                "",
+            ),
+            x=data.get(
+                "x",
+            ),
+            y=data.get(
+                "y",
+            ),
+            description=data.get(
+                "description",
+            ),
+            image_path=data.get(
+                "image_path",
+            ),
+            interactive_path=data.get(
+                "interactive_path",
+            ),
+            data=data.get(
+                "data",
+                {},
+            ),
+        )
+
 
 # ==========================================================
 # Chart Category
@@ -57,6 +96,29 @@ class ChartCategory:
         default_factory=list
     )
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "ChartCategory":
+        """
+        Deserialize ChartCategory.
+        """
+
+        return cls(
+            title=data.get(
+                "title",
+                "",
+            ),
+            charts=[
+                ChartSpec.from_dict(chart)
+                for chart in data.get(
+                    "charts",
+                    [],
+                )
+            ],
+        )
+
 
 # ==========================================================
 # Visualization Summary
@@ -71,6 +133,17 @@ class VisualizationSummary:
     total_charts: int = 0
 
     total_categories: int = 0
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "VisualizationSummary":
+        """
+        Deserialize VisualizationSummary.
+        """
+
+        return cls(**data)
 
 
 # ==========================================================
@@ -101,3 +174,34 @@ class VisualizationReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "VisualizationReport":
+        """
+        Deserialize VisualizationReport.
+        """
+
+        return cls(
+            summary=VisualizationSummary.from_dict(
+                data.get(
+                    "summary",
+                    {},
+                )
+            ),
+            categories=[
+                ChartCategory.from_dict(category)
+                for category in data.get(
+                    "categories",
+                    [],
+                )
+            ],
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

@@ -48,6 +48,64 @@ class Insight:
         default_factory=dict
     )
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "Insight":
+        """
+        Deserialize Insight.
+        """
+
+        return cls(
+            id=data.get(
+                "id",
+                "",
+            ),
+            title=data.get(
+                "title",
+                "",
+            ),
+            category=data.get(
+                "category",
+                "",
+            ),
+            severity=data.get(
+                "severity",
+                "",
+            ),
+            confidence=data.get(
+                "confidence",
+                1.0,
+            ),
+            description=data.get(
+                "description",
+                "",
+            ),
+            business_impact=data.get(
+                "business_impact",
+            ),
+            recommendation=data.get(
+                "recommendation",
+            ),
+            affected_columns=list(
+                data.get(
+                    "affected_columns",
+                    [],
+                )
+            ),
+            source_engine=data.get(
+                "source_engine",
+                "InsightEngine",
+            ),
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )
+
 
 # ==========================================================
 # Insight Summary
@@ -66,6 +124,17 @@ class InsightSummary:
     warning: int = 0
 
     informational: int = 0
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "InsightSummary":
+        """
+        Deserialize InsightSummary.
+        """
+
+        return cls(**data)
 
 
 # ==========================================================
@@ -96,3 +165,34 @@ class InsightReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "InsightReport":
+        """
+        Deserialize InsightReport.
+        """
+
+        return cls(
+            summary=InsightSummary.from_dict(
+                data.get(
+                    "summary",
+                    {},
+                )
+            ),
+            insights=[
+                Insight.from_dict(item)
+                for item in data.get(
+                    "insights",
+                    [],
+                )
+            ],
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

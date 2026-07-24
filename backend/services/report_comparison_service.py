@@ -440,6 +440,7 @@ class ReportComparisonService:
             "insights": compare_lists(
                 before.insights,
                 after.insights,
+                key=lambda insight: insight.id,
             ),
         }
 
@@ -467,6 +468,7 @@ class ReportComparisonService:
             "recommendations": compare_lists(
                 before.recommendations,
                 after.recommendations,
+                key=lambda recommendation: recommendation.id,
             ),
         }
 

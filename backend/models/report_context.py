@@ -62,3 +62,42 @@ class ReportContext:
         """
 
         return asdict(self)
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "ReportContext":
+        """
+        Deserialize a ReportContext.
+        """
+
+        return cls(
+            metadata=ReportMetadata.from_dict(
+                data["metadata"]
+            ),
+            dataset=DatasetReport.from_dict(
+                data["dataset"]
+            ),
+            quality=QualityReport.from_dict(
+                data["quality"]
+            ),
+            profiling=ProfilingReport.from_dict(
+                data["profiling"]
+            ),
+            correlation=CorrelationReport.from_dict(
+                data["correlation"]
+            ),
+            visualization=VisualizationReport.from_dict(
+                data["visualization"]
+            ),
+            rules=RuleReport.from_dict(
+                data["rules"]
+            ),
+            insights=InsightReport.from_dict(
+                data["insights"]
+            ),
+            recommendations=RecommendationReport.from_dict(
+                data["recommendations"]
+            ),
+        )

@@ -13,6 +13,226 @@
                 "PDF",
                 "JSON"
             ]
+        },
+        {
+            "report_id": "b4c40af0-7828-4773-8d07-e384ed283f3a",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T15:49:19.419992+00:00",
+            "directory": "reports\\b4c40af0-7828-4773-8d07-e384ed283f3a",
+            "archive_path": "reports\\b4c40af0-7828-4773-8d07-e384ed283f3a\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "aac3e318-f19d-415e-86c0-cd56de1dfc44",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T15:57:33.524509+00:00",
+            "directory": "reports\\aac3e318-f19d-415e-86c0-cd56de1dfc44",
+            "archive_path": "reports\\aac3e318-f19d-415e-86c0-cd56de1dfc44\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "63203269-11a7-487f-a000-5031de9dcb3c",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T15:58:35.975812+00:00",
+            "directory": "reports\\63203269-11a7-487f-a000-5031de9dcb3c",
+            "archive_path": "reports\\63203269-11a7-487f-a000-5031de9dcb3c\\report_archive.zip",
+            "formats": [
+                "HTML"
+            ]
+        },
+        {
+            "report_id": "5e0a480f-38c1-4dd9-b569-3687abe73637",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T15:58:37.997485+00:00",
+            "directory": "reports\\5e0a480f-38c1-4dd9-b569-3687abe73637",
+            "archive_path": "reports\\5e0a480f-38c1-4dd9-b569-3687abe73637\\report_archive.zip",
+            "formats": [
+                "HTML"
+            ]
+        },
+        {
+            "report_id": "6af2927f-2976-45ae-b0b2-36244532a68b",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T16:00:48.346592+00:00",
+            "directory": "reports\\6af2927f-2976-45ae-b0b2-36244532a68b",
+            "archive_path": "reports\\6af2927f-2976-45ae-b0b2-36244532a68b\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "9bc04ce6-664f-4860-8eae-c91b32c7f6c9",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.xlsx",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T16:01:43.212432+00:00",
+            "directory": "reports\\9bc04ce6-664f-4860-8eae-c91b32c7f6c9",
+            "archive_path": "reports\\9bc04ce6-664f-4860-8eae-c91b32c7f6c9\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "97d797d9-1387-479e-9052-e77898b3439f",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T16:06:29.846842+00:00",
+            "directory": "reports\\97d797d9-1387-479e-9052-e77898b3439f",
+            "archive_path": "reports\\97d797d9-1387-479e-9052-e77898b3439f\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "0a823044-72b8-4894-b956-ccb1ebbd2313",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "new_bank_customer.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T16:07:17.329727+00:00",
+            "directory": "reports\\0a823044-72b8-4894-b956-ccb1ebbd2313",
+            "archive_path": "reports\\0a823044-72b8-4894-b956-ccb1ebbd2313\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "d328a241-c2d9-444b-863e-eae240d61aec",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:24:22.545377+00:00",
+            "directory": "reports\\d328a241-c2d9-444b-863e-eae240d61aec",
+            "archive_path": "reports\\d328a241-c2d9-444b-863e-eae240d61aec\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "1fba2261-c2dd-4663-a16a-ee5b9eaae3a7",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:24:46.328292+00:00",
+            "directory": "reports\\1fba2261-c2dd-4663-a16a-ee5b9eaae3a7",
+            "archive_path": "reports\\1fba2261-c2dd-4663-a16a-ee5b9eaae3a7\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "2230d040-686d-4b06-a783-c0664f2cbc9f",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "new_bank_customer.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:25:03.044630+00:00",
+            "directory": "reports\\2230d040-686d-4b06-a783-c0664f2cbc9f",
+            "archive_path": "reports\\2230d040-686d-4b06-a783-c0664f2cbc9f\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "82470a72-a3db-4984-89c2-ffc8669fea4b",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:30:05.200908+00:00",
+            "directory": "reports\\82470a72-a3db-4984-89c2-ffc8669fea4b",
+            "archive_path": "reports\\82470a72-a3db-4984-89c2-ffc8669fea4b\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "b379db2c-9b31-4582-b8dc-8ec06b10800a",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:34:34.841001+00:00",
+            "directory": "reports\\b379db2c-9b31-4582-b8dc-8ec06b10800a",
+            "archive_path": "reports\\b379db2c-9b31-4582-b8dc-8ec06b10800a\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "674ed5ed-ec91-4c1c-8ac7-6a7584293dee",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "new_bank_customer.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:38:46.683215+00:00",
+            "directory": "reports\\674ed5ed-ec91-4c1c-8ac7-6a7584293dee",
+            "archive_path": "reports\\674ed5ed-ec91-4c1c-8ac7-6a7584293dee\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "f2d96ceb-630c-4d88-ac66-87b5a5ae20eb",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:39:14.128343+00:00",
+            "directory": "reports\\f2d96ceb-630c-4d88-ac66-87b5a5ae20eb",
+            "archive_path": "reports\\f2d96ceb-630c-4d88-ac66-87b5a5ae20eb\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
+        },
+        {
+            "report_id": "d99f59d9-b030-483e-9b0a-f243b2ce93a7",
+            "title": "InsightPilot AI Report",
+            "dataset_name": "bank_customers.csv",
+            "version": "0.9.0",
+            "generated_at": "2026-07-24T19:40:37.558978+00:00",
+            "directory": "reports\\d99f59d9-b030-483e-9b0a-f243b2ce93a7",
+            "archive_path": "reports\\d99f59d9-b030-483e-9b0a-f243b2ce93a7\\report_archive.zip",
+            "formats": [
+                "HTML",
+                "PDF",
+                "JSON"
+            ]
         }
     ]
 }

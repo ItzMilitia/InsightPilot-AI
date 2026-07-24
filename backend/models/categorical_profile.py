@@ -32,3 +32,14 @@ class CategoricalProfile:
     average_length: float = 0.0
     minimum_length: int = 0
     maximum_length: int = 0
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict,
+    ) -> "CategoricalProfile":
+        """
+        Deserialize CategoricalProfile.
+        """
+
+        return cls(**data)

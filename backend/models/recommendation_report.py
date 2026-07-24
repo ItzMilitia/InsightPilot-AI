@@ -86,6 +86,74 @@ class Recommendation:
         default_factory=dict
     )
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "Recommendation":
+        """
+        Deserialize Recommendation.
+        """
+
+        return cls(
+            id=data.get(
+                "id",
+                "",
+            ),
+            title=data.get(
+                "title",
+                "",
+            ),
+            description=data.get(
+                "description",
+                "",
+            ),
+            category=data.get(
+                "category",
+                "",
+            ),
+            priority=RecommendationPriority(
+                data.get(
+                    "priority",
+                    RecommendationPriority.MEDIUM.value,
+                )
+            ),
+            impact=BusinessImpact(
+                data.get(
+                    "impact",
+                    BusinessImpact.MEDIUM.value,
+                )
+            ),
+            effort=ImplementationEffort(
+                data.get(
+                    "effort",
+                    ImplementationEffort.MEDIUM.value,
+                )
+            ),
+            source_engine=data.get(
+                "source_engine",
+                "",
+            ),
+            affected_columns=list(
+                data.get(
+                    "affected_columns",
+                    [],
+                )
+            ),
+            implementation_steps=list(
+                data.get(
+                    "implementation_steps",
+                    [],
+                )
+            ),
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )
+
 
 # ==========================================================
 # Recommendation Summary
@@ -104,6 +172,17 @@ class RecommendationSummary:
     medium_priority: int = 0
 
     low_priority: int = 0
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "RecommendationSummary":
+        """
+        Deserialize RecommendationSummary.
+        """
+
+        return cls(**data)
 
 
 # ==========================================================
@@ -134,3 +213,34 @@ class RecommendationReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "RecommendationReport":
+        """
+        Deserialize RecommendationReport.
+        """
+
+        return cls(
+            summary=RecommendationSummary.from_dict(
+                data.get(
+                    "summary",
+                    {},
+                )
+            ),
+            recommendations=[
+                Recommendation.from_dict(item)
+                for item in data.get(
+                    "recommendations",
+                    [],
+                )
+            ],
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

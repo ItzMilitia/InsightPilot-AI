@@ -63,6 +63,14 @@ class NumericProfile:
 
     interquartile_range: float | None = None
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "NumericProfile":
+
+        return cls(**data)
+
 
 # ==========================================================
 # Profiling Summary
@@ -86,6 +94,14 @@ class ProfilingSummary:
 
     text_columns: int = 0
 
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "ProfilingSummary":
+
+        return cls(**data)
+
 
 # ==========================================================
 # Memory Profile
@@ -100,6 +116,14 @@ class MemoryProfile:
     total_memory: str | None = None
 
     average_column_memory: str | None = None
+
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "MemoryProfile":
+
+        return cls(**data)
 
 
 # ==========================================================
@@ -146,3 +170,57 @@ class ProfilingReport:
         """
 
         return asdict(self)
+    
+    @classmethod
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+    ) -> "ProfilingReport":
+
+        return cls(
+            summary=ProfilingSummary.from_dict(
+                data.get(
+                    "summary",
+                    {},
+                )
+            ),
+            numeric_profiles=[
+                NumericProfile.from_dict(item)
+                for item in data.get(
+                    "numeric_profiles",
+                    [],
+                )
+            ],
+            categorical_profiles=[
+                CategoricalProfile.from_dict(item)
+                for item in data.get(
+                    "categorical_profiles",
+                    [],
+                )
+            ],
+            datetime_profiles=[
+                DatetimeProfile.from_dict(item)
+                for item in data.get(
+                    "datetime_profiles",
+                    [],
+                )
+            ],
+            high_cardinality_columns=list(
+                data.get(
+                    "high_cardinality_columns",
+                    [],
+                )
+            ),
+            memory=MemoryProfile.from_dict(
+                data.get(
+                    "memory",
+                    {},
+                )
+            ),
+            metadata=dict(
+                data.get(
+                    "metadata",
+                    {},
+                )
+            ),
+        )

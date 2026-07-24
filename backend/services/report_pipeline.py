@@ -39,6 +39,13 @@ from backend.services.report_explorer_service import (
     ReportExplorerService,
 )
 
+from backend.services.report_loader_service import (
+    ReportLoaderService,
+)
+from backend.services.report_repository_bootstrap import (
+    ReportRepositoryBootstrap,
+)
+
 class ReportPipeline:
     """
     Enterprise reporting pipeline.
@@ -137,9 +144,29 @@ class ReportPipeline:
             history_service=self._history_service,
         )
 
+        self._loader_service = ReportLoaderService(
+            reports_directory=Path("reports"),
+        )
+
+        self._bootstrap_service = ReportRepositoryBootstrap(
+            registry=self._registry,
+            loader_service=self._loader_service,
+            index_service=self._index_service,
+        )
+
         self._explorer_service = ReportExplorerService(
+            registry=self._registry,
             history_service=self._history_service,
             version_service=self._version_service,
+            loader_service=self._loader_service,
+            comparison_engine=self._comparison_engine,
+        )
+
+        #
+        # Restore persisted reports into the in-memory registry.
+        #
+        self._bootstrap_summary = (
+            self._bootstrap_service.initialize()
         )
 
     def run(
@@ -411,3 +438,11 @@ class ReportPipeline:
         """
 
         return self._explorer_service
+    
+    @property
+    def bootstrap_summary(self):
+        """
+        Return the startup bootstrap summary.
+        """
+
+        return self._bootstrap_summary
